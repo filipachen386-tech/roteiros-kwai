@@ -3,47 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banco de Roteiros Profissionais - Brasil</title>
+    <title>Hub de Roteiros Brasil - Biblioteca Viral</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap');
         
-        body { font-family: 'Poppins', sans-serif; background-color: #fcfaf2; color: #1e293b; }
-        h1, h2, h3 { font-family: 'Montserrat', sans-serif; }
+        :root {
+            --brazil-green: #009739;
+            --brazil-yellow: #FFDF00;
+            --brazil-blue: #002776;
+        }
 
-        .bg-brazil-yellow { background-color: #FFB800; }
-        .bg-brazil-green { background-color: #00875F; }
-        .text-brazil-green { color: #00875F; }
+        body { 
+            font-family: 'Open Sans', sans-serif; 
+            background-color: #f0f2f5;
+        }
         
-        .glass-nav { background: rgba(255, 184, 0, 0.95); backdrop-filter: blur(10px); }
-        .script-card { transition: all 0.3s ease; border: 1px solid #e2e8f0; }
-        .script-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(0, 135, 95, 0.2); border-color: #00875F; }
+        h1, h2, h3, .font-title { 
+            font-family: 'Montserrat', sans-serif; 
+        }
 
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .brazil-gradient {
+            background: linear-gradient(135deg, var(--brazil-green) 0%, #00702a 100%);
+        }
 
-        .tag-familiar { background-color: #ffedd5; color: #9a3412; }
-        .tag-social { background-color: #dbeafe; color: #1e40af; }
-        .tag-relacionamento { background-color: #fce7f3; color: #9d174d; }
-        .tag-suspense { background-color: #f1f5f9; color: #334155; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .script-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .script-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        /* 自定义难度标签颜色 */
+        .badge-simples { background: #dcfce7; color: #15803d; }
+        .badge-moderada { background: #fef9c3; color: #854d0e; }
+        .badge-complexa { background: #fee2e2; color: #b91c1c; }
+
+        /* 自定义滚动条 */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: var(--brazil-green); }
+
+        @keyframes pulse-custom {
+            0% { box-shadow: 0 0 0 0 rgba(0, 151, 57, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 151, 57, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 151, 57, 0); }
+        }
+        .btn-live { animation: pulse-custom 2s infinite; }
     </style>
 </head>
-<body>
+<body class="text-slate-800">
 
-    <!-- Navegação -->
-    <nav class="sticky top-0 z-50 glass-nav shadow-md">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="bg-white p-1.5 rounded-lg">
-                    <i class="fas fa-scroll text-brazil-green text-xl"></i>
+    <!-- 顶部导航 / Header Estilo Brasil -->
+    <nav class="brazil-gradient text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-white p-2 rounded-xl shadow-inner">
+                    <i class="fas fa-clapperboard text-green-700 text-2xl"></i>
                 </div>
-                <span class="text-green-900 font-extrabold text-xl">HUB<span class="text-white">ROTEIROS</span></span>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tighter leading-none">ROTEIROS <span class="text-yellow-300">VIRAIS</span></h1>
+                    <p class="text-[10px] opacity-80 font-semibold tracking-widest uppercase">Estratégia & Retenção</p>
+                </div>
             </div>
-            <div class="flex items-center gap-4 text-white">
-                <button onclick="scrollToSection('favorites')" class="relative p-2">
-                    <i class="fas fa-heart text-2xl"></i>
-                    <span id="fav-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center border-2 border-brazil-yellow hidden">0</span>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:block text-right">
+                    <p class="text-xs opacity-75">Base de Dados</p>
+                    <p class="font-bold text-yellow-300" id="stats-info">Carregando...</p>
+                </div>
+                <button onclick="scrollToSection('main-grid')" class="bg-yellow-400 hover:bg-yellow-300 text-green-900 px-4 py-2 rounded-full font-bold text-sm transition-all btn-live">
+                    Explorar
                 </button>
             </div>
         </div>
@@ -51,259 +90,351 @@
 
     <main class="max-w-7xl mx-auto px-4 py-8">
         
-        <!-- Obras em Destaque -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-extrabold text-slate-800 mb-6 flex items-center gap-2">
-                <i class="fas fa-fire text-orange-500"></i> Destaque da Comunidade
-            </h2>
-            <div class="flex overflow-x-auto gap-4 pb-6 no-scrollbar">
-                <!-- Video 1 -->
-                <a href="https://www.kwai.com/@A_Vida_Nos_Videos/video/5202933579519336372" target="_blank" class="flex-shrink-0 w-44 sm:w-60 group">
-                    <div class="relative aspect-[9/16] rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-brazil-green transition-all">
-                        <img src="https://kwaipro-audit.yximgs.com/upic/2025/12/31/22/BMjAyNTEyMzEyMjIyMTFfMTUwMDAxNDc1MjUyNDUwXzE1MDExMDE1NTkwNDY0M18xXzM=_pcover_B52943453e7a8f6f78d960815890e3139.jpg?tag=1-1776929216-sp-0-t8dwqurtb0-e61b62a7940d8e57" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <i class="fas fa-play text-white text-4xl"></i>
-                        </div>
-                    </div>
-                </a>
-                <!-- Video 2 -->
-                <a href="https://www.kwai.com/@A_Vida_Nos_Videos/video/5245436301009358251" target="_blank" class="flex-shrink-0 w-44 sm:w-60 group">
-                    <div class="relative aspect-[9/16] rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-brazil-green transition-all">
-                        <img src="https://kwaipro-audit.yximgs.com/upic/2025/12/31/04/BMjAyNTEyMzEwNDU0MTJfMTUwMDAxNDc1MjUyNDUwXzE1MDExMDE1MTk5NjMzNl8xXzM=_pcover_Beb1a1388a31b55e021ea74b7b916f26d.jpg?tag=1-1776929496-sp-0-rjim5ycmdm-7886e114f86ba0fa" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <i class="fas fa-play text-white text-4xl"></i>
-                        </div>
-                    </div>
-                </a>
-                <!-- Video 3 -->
-                <a href="https://www.kwai.com/@hiolandasilva041/video/5225451580956869878" target="_blank" class="flex-shrink-0 w-44 sm:w-60 group">
-                    <div class="relative aspect-[9/16] rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-brazil-green transition-all">
-                        <img src="https://ak-br-pic.kwai.net/upic/2026/01/03/20/BMjAyNjAxMDMyMDE4MjdfMTUwMDAwMTQzNjY5MTE0XzE1MDExMDE3MTkyNjA2MF8xXzM=_pcover_B43facfd229995ff7bccabcafb707f2f5.jpg?tag=1-1776929558-sp-0-tuzoococg9-3d1f6a8d1c7f1fcb" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <i class="fas fa-play text-white text-4xl"></i>
-                        </div>
-                    </div>
-                </a>
-                <!-- Video 4 -->
-                <a href="https://www.kwai.com/@viic_novelinhas19/video/5241214175523493987" target="_blank" class="flex-shrink-0 w-44 sm:w-60 group">
-                    <div class="relative aspect-[9/16] rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-brazil-green transition-all">
-                        <img src="https://kwaipro-audit.yximgs.com/upic/2026/01/06/07/BMjAyNjAxMDYwNzM0MDlfMTUwMDAxNjM2NDk1NjkwXzE1MDExMDE4NTg5OTI2NF8xXzM=_pcover_Bae4d19d89e7c4206b622251272fdbe58.jpg?tag=1-1776929644-sp-0-r8un7wjwss-ec36b6f3cb9ccea7" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <i class="fas fa-play text-white text-4xl"></i>
-                        </div>
-                    </div>
-                </a>
+        <!-- 核心提示 / Intro -->
+        <section class="mb-10 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row items-center gap-6">
+            <div class="bg-blue-50 p-5 rounded-2xl">
+                <i class="fas fa-lightbulb text-blue-600 text-3xl"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold mb-1">Dica de Ouro para Criadores</h2>
+                <p class="text-slate-600 text-sm">O público brasileiro valoriza o **conflito emocional imediato**. Use os elementos "A/B/C/D" para adaptar o roteiro à sua realidade de cenário e atores.</p>
             </div>
         </section>
 
-        <!-- Filtros -->
-        <section class="bg-white p-6 rounded-3xl shadow-sm mb-10 border border-slate-100">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <input type="text" id="search" placeholder="Pesquisar roteiro..." class="bg-slate-50 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-brazil-green">
-                <select id="cat-filter" class="bg-slate-50 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-brazil-green">
-                    <option value="all">Categorias</option>
-                    <option value="Drama de relacionamento">Relacionamento</option>
-                    <option value="Drama familiar">Familiar</option>
-                    <option value="Drama social">Social</option>
-                    <option value="Drama de suspense">Suspense</option>
-                </select>
-                <div class="lg:col-span-2 flex items-center justify-center bg-brazil-green text-white rounded-2xl p-3 font-bold text-sm italic">
-                    BANCO DE ROTEIROS ATUALIZADO (V1.0)
-                </div>
+        <!-- 过滤器 / Filtros -->
+        <div class="sticky top-24 z-40 mb-8 flex flex-wrap gap-3 bg-slate-50/80 backdrop-blur-md py-4 rounded-xl">
+            <div class="relative flex-grow min-w-[280px]">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="search-input" placeholder="Buscar por tema, personagem ou palavra-chave..." 
+                    class="w-full pl-12 pr-4 py-3 rounded-2xl border-none shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-green-500 outline-none transition">
             </div>
-        </section>
+            <select id="category-filter" class="px-4 py-3 rounded-2xl border-none shadow-sm ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-green-500 text-sm font-semibold">
+                <option value="all">Todas as Categorias</option>
+                <option value="Drama de relacionamento">Relacionamento</option>
+                <option value="Drama familiar">Familiar</option>
+                <option value="Drama social">Social/Moral</option>
+                <option value="Drama de suspense">Suspense</option>
+            </select>
+            <select id="diff-filter" class="px-4 py-3 rounded-2xl border-none shadow-sm ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-green-500 text-sm font-semibold">
+                <option value="all">Qualquer Dificuldade</option>
+                <option value="Simples">Simples</option>
+                <option value="Moderada">Moderada</option>
+                <option value="Complexa">Complexa</option>
+            </select>
+        </div>
 
-        <!-- Meus Favoritos -->
-        <section id="favorites-section" class="mb-12 hidden">
-            <h2 class="text-2xl font-extrabold text-red-500 mb-6 italic"><i class="fas fa-heart"></i> Meus Salvos</h2>
-            <div id="fav-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            <hr class="mt-10">
-        </section>
+        <!-- 脚本网格 / Grid de Roteiros -->
+        <div id="main-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Dinâmico -->
+        </div>
 
-        <!-- Lista Principal -->
-        <h2 class="text-2xl font-extrabold text-slate-800 mb-6 italic">Explorar Roteiros</h2>
-        <div id="main-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-20"></div>
-
+        <!-- 加载更多提示 -->
+        <div id="empty-msg" class="hidden py-20 text-center text-slate-400">
+            <i class="fas fa-box-open text-5xl mb-4"></i>
+            <p>Nenhum roteiro encontrado para esses filtros.</p>
+        </div>
     </main>
 
-    <!-- Modal -->
-    <div id="modal" class="fixed inset-0 z-[100] hidden overflow-y-auto px-4 flex items-center justify-center py-10">
-        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
-        <div class="relative bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl animate-in fade-in duration-300">
-            <div id="modal-header" class="h-24 bg-brazil-yellow flex items-center px-8 relative rounded-t-[2.5rem]">
-                <h3 id="modal-title" class="text-white font-extrabold text-xl leading-tight pr-6"></h3>
-                <button onclick="closeModal()" class="absolute top-6 right-6 text-white hover:opacity-50"><i class="fas fa-times text-2xl"></i></button>
+    <!-- 详情模态框 / Modal Full Content -->
+    <div id="script-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onclick="closeModal()"></div>
+        <div class="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-[2rem] shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300">
+            
+            <!-- Modal Header -->
+            <div id="modal-header" class="p-6 md:p-8 text-white relative brazil-gradient">
+                <button onclick="closeModal()" class="absolute top-6 right-6 w-10 h-10 bg-black/20 hover:bg-black/40 rounded-full flex items-center justify-center transition">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="flex items-center gap-3 mb-2">
+                    <span id="modal-badge" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-white text-green-800"></span>
+                    <span id="modal-category" class="text-xs font-bold opacity-80 uppercase tracking-tighter"></span>
+                </div>
+                <h2 id="modal-title" class="text-2xl md:text-3xl font-extrabold"></h2>
             </div>
-            <div id="modal-body" class="p-8 space-y-6 max-h-[70vh] overflow-y-auto no-scrollbar"></div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="flex-grow overflow-y-auto p-6 md:p-10 custom-scroll bg-slate-50">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Left: Core Info -->
+                    <div class="lg:col-span-7 space-y-8">
+                        <section>
+                            <h3 class="text-green-700 font-black text-sm uppercase mb-3 flex items-center gap-2">
+                                <i class="fas fa-quote-left opacity-30"></i> Conceito Central
+                            </h3>
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm italic text-slate-700 leading-relaxed">
+                                <span id="modal-summary"></span>
+                            </div>
+                        </section>
+
+                        <section>
+                            <h3 class="text-green-700 font-black text-sm uppercase mb-3 flex items-center gap-2">
+                                <i class="fas fa-clock"></i> Ritmo da Narrativa (Timeline)
+                            </h3>
+                            <div id="modal-pacing" class="space-y-3">
+                                <!-- 节奏点渲染 -->
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Right: Elements & Cast -->
+                    <div class="lg:col-span-5 space-y-8">
+                        <section class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                            <h3 class="text-indigo-600 font-black text-sm uppercase mb-4 flex items-center gap-2">
+                                <i class="fas fa-users"></i> Perfis de Personagem
+                            </h3>
+                            <div id="modal-cast" class="text-slate-600 text-sm space-y-4 whitespace-pre-line"></div>
+                        </section>
+
+                        <section class="bg-yellow-50 p-6 rounded-3xl border border-yellow-100 shadow-sm">
+                            <h3 class="text-yellow-700 font-black text-sm uppercase mb-4 flex items-center gap-2">
+                                <i class="fas fa-shuffle"></i> Variantes (A/B/C/D)
+                            </h3>
+                            <div id="modal-options" class="space-y-4">
+                                <!-- 替换元素渲染 -->
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="p-6 bg-white border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] text-slate-400 font-bold uppercase">Código do Roteiro: <span id="modal-id"></span></p>
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <button onclick="copyFullScript()" class="flex-grow sm:flex-grow-0 px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl transition shadow-lg shadow-green-100 flex items-center justify-center gap-2">
+                        <i class="fas fa-copy"></i> Copiar Tudo
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // TODAS AS 47 ENTRADAS DO BANCO DE DADOS
-        const scripts = [
-            // DRAMA DE RELACIONAMENTO
-            { id: 1, category: "Drama de relacionamento", title: "Afeto falso e manipulação emocional", sub: "Padrões Duplos", summary: "Discussão sobre o duplo padrão se intensifica revelando choque de valores.", characters: "Masc: Namorado racional. Fem: Parceira com desejo de controle.", pacing: "0-15s Comportamento extremo; 75-100s Ápice emocional; 110-120s Expulsão.", flexible: "Conflito (Ex, Colega), Evidência (Câmera, Prints), Cena (Casa, Carro)." },
-            { id: 2, category: "Drama de relacionamento", title: "Afeto falso e manipulação emocional", sub: "O Artista e a Nobreza", summary: "Artista de rua pobre vs Mulher rica mas vazia por dentro.", characters: "Masc: Artista rico de alma. Fem: Ostentadora vazia. Ex: Manipulador frio.", pacing: "45-75s Reviravolta (Masc demonstra força); 100-120s Pergunta final.", flexible: "Ajudar sem-teto, Escolha da independência, Punição do ex." },
-            { id: 3, category: "Drama de relacionamento", title: "Afeto falso e manipulação emocional", sub: "Testes de Fidelidade", summary: "Desconfiança e manipulação emocional em busca da verdade conjugal.", characters: "Marido: Manipulador calmo. Esposa: Desconfiada. Amante: Mente por trás.", pacing: "15-45s Descoberta de evidências; 75-95s Falsa prova; 110-120s Reconciliação ou não.", flexible: "Escuta, Mensagens vazadas, Cena (Compras, Família)." },
-            { id: 4, category: "Drama de relacionamento", title: "Afeto falso e manipulação emocional", sub: "A Parasita e o Caçador", summary: "Uso da fraqueza fingida para atrair indivíduos egoístas e interesseiros.", characters: "Masc: Caçador calmo. Fem: Parasita interesseira. Filho: Aliado crucial.", pacing: "40-90s Mudança de choque para repulsa; 110-120s Domínio intelectual.", flexible: "Motivo (Falência, Doença), Ação (Roubo, Traição), Final (Segurança)." },
-            { id: 5, category: "Drama de relacionamento", title: "Afeto falso e manipulação emocional", sub: "Controle da Mãe", summary: "Mãe patológica que vê as filhas como bens materiais e moeda de troca.", characters: "Mãe: Governante. Irmandade: Comunidade de destino despertando.", pacing: "20-50s Hierarquia familiar; 80-100s Despertar; 100-120s Suspense final.", flexible: "Controle (Dívida, Casamento), Retaliação (Chamar polícia), Gatilho (Sonhos destruídos)." },
-            { id: 6, category: "Drama de relacionamento", title: "Relacionamento Tóxico", sub: "Desvalorização", summary: "O medo de recomeçar em meio a um relacionamento tóxico e desvalorizado.", characters: "Protagonista (Em crise) vs Felipe (Egoísta) vs Taís (Amiga insecure) vs Novo Pretendente.", pacing: "15-45s Humilhação; 45-90s Decisão de romper; 90-110s Reviravolta de apoio.", flexible: "Motivo (Aparência, Carreira), Frase (Você não vale nada), Final (Rompimento definitivo)." },
-            { id: 7, category: "Drama de relacionamento", title: "Despertar Feminino", sub: "O Policial e a Infiel", summary: "Policial vingativo contra namorada que mantém amante no carro dele.", characters: "Masc: Policial honrado. Fem: Namorada infiel subestimadora.", pacing: "15-45s Gerar revolta; 75-110s Auge da tensão; 110-120s Gerar comentários.", flexible: "Disfarce (Palhaço, Entregador), Evidência (Câmera carro), Punição (Flagra)." },
-            { id: 8, category: "Drama de relacionamento", title: "Conflito de Valores", sub: "Traição por Impulso", summary: "Discussão sobre amor próprio vs mulher insatisfeita que trai por impulso.", characters: "Masc: Calmo (valoriza amor próprio). Fem: Insatisfeita (trai e arrepende).", pacing: "15-45s Construção traição; 75-100s Inversão forte; 110-120s Término calmo.", flexible: "Gatilho (Eu te amo, Dá chance), Reação (Frieza total), Cenário (Hotel, Festa)." },
-            { id: 9, category: "Drama de relacionamento", title: "Acerto de Interesses", sub: "Preço do Amor", summary: "Mulher interesseira finge situações extremas para benefício financeiro.", characters: "Masc: Trabalhador firme. Fem: Manipuladora interesseira (finge gravidez).", pacing: "45-75s Frase chave (pelo dinheiro); 100-110s Clímax/Confronto; 110-120s Pergunta.", flexible: "Mentira (Gravidez, Doença), Evidência (Escuta), Ação (Jogar dinheiro na cara)." },
-            { id: 10, category: "Drama de relacionamento", title: "Relações Controladoras", sub: "Em nome do Amor", summary: "Homem controlador e inseguro usa ciúmes e intimidação para dominar.", characters: "Masc: Controlador/Paranoico. Fem: Submissa/Oprimida.", pacing: "45-75s Chegada e confronto; 100-110s Proibição e ameaça; 110-120s Pergunta.", flexible: "Controle (Roupa, Sair), Punição (Ameaça física), Cenário (Ambiente doméstico)." },
-            { id: 11, category: "Drama de relacionamento", title: "Crise de Confiança", sub: "Múltiplos Dates", summary: "Homem oportunista tenta sustentar múltiplos encontros ao mesmo tempo.", characters: "Masc: Oportunista desorganizado. Fem: Mulheres unidas na descoberta.", pacing: "15-45s Coincidência das mulheres; 100-110s Descoberta; 110-120s União das Fem.", flexible: "Conflito (Múltiplos dates), Punição (Exposição grupo), Cenário (Rua, Calçada)." },
-            { id: 12, category: "Drama de relacionamento", title: "Sacrificada", sub: "Camila vs William", summary: "Traidor prepotente descobre que não tem nada no seu nome.", characters: "Camila: Dona da casa decidida. William: Traidor prepotente.", pacing: "20-50s Camila prepara o bote; 50-90s Revelação dono da casa; 110-120s Pergunta.", flexible: "Prova (Celular, Batom), Bem (Casa, Carro), Humilhação (Expulsar do quarto)." },
-            { id: 13, category: "Drama de relacionamento", title: "Poder e Controle", sub: "Ciúme na Piscina", summary: "Disputa por liberdade vs proibições absurdas de um parceiro possessivo.", characters: "Camila: Busca liberdade. Maurício: Inseguro/Agressivo.", pacing: "50-90s Clímax (O biquíni); 90-110s Rotulando como louca; 110-120s Desfecho.", flexible: "Gatilho (Óculos, Maquiagem), Proibição (Biquíni, Sair), Tática (Gaslighting)." },
-            { id: 14, category: "Drama de relacionamento", title: "Volta por Cima", sub: "Dívida Histórica", summary: "Filha rejeitada volta poderosa para cobrar dívida dos irmãos machistas.", characters: "Carla: Empresária poderosa. Irmãos: Falidos e machistas.", pacing: "50-90s Revelação compra da dívida; 90-110s Ultimato; 110-120s Pergunta piedade.", flexible: "Motivo Expulsão (Gravidez peão, Carreira), Arma (Boleto), Preconceito (Mulher)." },
-            { id: 15, category: "Drama de relacionamento", title: "Interferência Familiar", sub: "A Pensão de Menezes", summary: "Confronto entre mãe decidida e pai negligente que ostenta viagens.", characters: "Protagonista: Decidida. Menezes: Imaturo/Agressivo (não paga pensão).", pacing: "20-50s Antagonista ostenta viagem; 90-110s Desabafo; 110-120s Pergunta.", flexible: "Motivo (Pensão, Esqueceu filho), Nova Vida (Post no Insta), Local (Porta do bar)." },
-
-            // DRAMA FAMILIAR
-            { id: 16, category: "Drama familiar", title: "Poder de Criação", sub: "Nicole e a Madrasta", summary: "Conflito entre filha mimada de outro casamento vs Madrasta justa.", characters: "Filha: Mimada. Madrasta: Busca limites. Pai: Pancada/Conivente.", pacing: "15-45s Intensidade emocional; 75-95s Reviravolta; 110-120s Reflexões finais.", flexible: "Pedido (Lagosta, Roupa), Ruptura (Grito), Tema (Comprar amor filha)." },
-            { id: 17, category: "Drama familiar", title: "Sacrifício", sub: "Não é Pai", summary: "Padrasto provedor excluído sob o argumento biológico de não ser pai.", characters: "Padrasto: Zeloso. Mãe: Defensiva. Enteada: Desdenhosa.", pacing: "15-45s Escalada; 75-95s Clímax; 110-120s Rompimento e reflexão.", flexible: "Gatilho (Celular, Notas), Humilhação (Não é meu pai), Sacrifício (Escola)." },
-            { id: 18, category: "Drama familiar", title: "Violência Doméstica", sub: "Filho Protetor", summary: "Filho luta para proteger a mãe fragilizada de um padrasto agressivo.", characters: "Filho: Batalhador. Padrasto: Violento. Mãe: Fragilizada.", pacing: "45-75s Demonstração poder vilão; 75-95s Flagrante; 110-120s Lição moral.", flexible: "Gatilho (Moto nova), Prova (Roubo, Traição), Final (Denunciaria agressor?)." },
-            { id: 19, category: "Drama familiar", title: "Justiça Feminina", sub: "Vingança de VT", summary: "Líder respeitado impõe ordem após agressão sofrida por mulheres.", characters: "VT: Líder respeitado. Antagonista: Violento (bate em mulher).", pacing: "45-75s Ponto de ruptura; 95-110s Desmascaramento; 110-120s Pergunta perdão.", flexible: "Gatilho (Ida ao salão), Desculpa (Ciúme), Prova (Vizinho avisa, Marcas)." },
-            { id: 20, category: "Drama familiar", title: "Favoritismo", sub: "Filha Esquecida", summary: "Mãe usa recursos de uma filha para sustentar o luxo da preferida.", characters: "Vítima: Esquecida. Favorita: Egocêntrica. Mãe: Vilã manipuladora.", pacing: "45-75s Exploração financeira; 75-95s Humilhação pública; 110-120s Pergunta.", flexible: "Objeto (iPhone, Roupa), Justificativa (Irmã modelo), Fonte (Pensão pai)." },
-            { id: 21, category: "Drama familiar", title: "A Filha Caixa Eletrônico", sub: "Irmão Parasita", summary: "Mãe conivente tira de quem trabalha para dar ao filho folgado.", characters: "Provedora: Sobrecaregada. Irmão: Parasita. Mãe: Conivente.", pacing: "15-45s Conflito oculto; 75-95s Flagrante; 110-120s Sair de casa?", flexible: "Valor (Aluguel, Luz), Desculpa (Dívida perigosa), Prova (Mãe pegando na carteira)." },
-            { id: 22, category: "Drama familiar", title: "Sequestro de Idoso", sub: "Nora Abusiva", summary: "Nora tranca comida e trata sogra idosa como empregada doméstica.", characters: "Justiçeira: Sobrinha. Nora: Abusiva. Tio: Mediador.", pacing: "0-15s Privação básica; 75-95s Ultimato expulsão; 110-120s Denúncia correta?", flexible: "Maldade (Geladeira cadeado), Desculpa (Pós-cirurgia), Prova (Neta vê avó chorando)." },
-            { id: 23, category: "Drama familiar", title: "Reciprocidade", sub: "Comida Estragada", summary: "Madrasta ostenta luxo para biológica e dá comida estragada à enteada.", characters: "Pai: Justo/Provedor. Madrasta: Parcial/Manipuladora.", pacing: "0-15s Contraste choque; 75-95s Pai revela sustento luxo; 110-120s Pergunta.", flexible: "Desigualdade (Frango estragado vs Banquete), Prova (Pai cheira comida)." },
-            { id: 24, category: "Drama familiar", title: "Máscaras", sub: "Falsa Identidade", summary: "Impostor agressivo rouba câmera profissional e familiares se omitem.", characters: "Antagonista: Impostor. Cúmplices: Jovens omissos. Mãe: Protetora.", pacing: "0-15s Desmascaramento; 75-95s Ultimato castigo coletivo; 110-120s Dilema ético.", flexible: "Objeto (Câmera, Celular), Identidade (Fotógrafo), Omissão (Caiu sozinha)." },
-            { id: 25, category: "Drama familiar", title: "Empregada da Casa", sub: "Filho Machista", summary: "Filho exige privilégios e trata mãe doente como sua serva.", characters: "Filha: Dedicada. Filho: Machista/Mimado. Mãe: Doente.", pacing: "45-75s Ruptura harmonia; 95-110s Expulsão do folgado; 110-120s Pergunta.", flexible: "Cuidado (Sopa, Remédio), Ofensa (Sopa não é janta), Prova (Tenta tirar da cama)." },
-            { id: 26, category: "Drama familiar", title: "Filho de Ouro", sub: "O Remédio da Mãe", summary: "Vilã sabota remédio da sogra para tentar expulsá-la de casa.", characters: "Willian: Protetor. Camila: Megera. Mãe: O alvo vulnerável.", pacing: "0-30s Revelação sabotagem; 60-90s Virada (Remédio novo); 110-120s Xeque-mate.", flexible: "Sabotagem (Esconder remédio), Argumento (Cheiro de velho), Trunfo (Gravação)." },
-            { id: 27, category: "Drama familiar", title: "O Investidor", sub: "Noiva Alpinista", summary: "Noiva humilha sogros sem saber que eles são os donos do negócio.", characters: "Willian: Honrado. Noiva: Interesseira. Pais: Donos ocultos.", pacing: "30-60s Explosão arrogância; 60-90s Revelação investidor; 110-120s Rompimento.", flexible: "Cenário (Inauguração), Humilhação (Confundir com faxina), Desfecho (Demitir noiva)." },
-            { id: 28, category: "Drama familiar", title: "Estigma Visual", sub: "Breno e a Tatuagem", summary: "Mãe expulsa filho trabalhador por puro preconceito com sua aparência.", characters: "Breno: Tatuado (honesto). Mãe: Preconceituosa. Irmão: Salvo por Breno.", pacing: "0-40s Conflito estético; 70-100s Breno salva irmão; 110-120s Injustiça contínua.", flexible: "Estigma (Tatuagem, Piercing), Reação (Queimar roupas), Perigo (Assalto, Cobrador)." },
-            { id: 29, category: "Drama familiar", title: "A Confeiteira", sub: "Filho Parasita", summary: "Filho exige doces de graça para impressionar namorada rica.", characters: "Mãe: Batalhadora. Luca: Imaturo. Pai: Mediador justo.", pacing: "0-30s Mentira status; 90-120s Pai desconta do cartão; 110-120s Pergunta.", flexible: "Ofício (Costureira, Salgadeira), Mentira (Somos ricos), Punição (Lavar louça)." },
-            { id: 30, category: "Drama familiar", title: "Independência", sub: "Irmão da Rua", summary: "Esposa quer expulsar cunhado que morava na rua após acidente doméstico.", characters: "Breno: Princípios. Alice: Materialista. Igor: Excluído/Vulnerável.", pacing: "40-80s Alice usa acidente como pretexto; 100-120s Breno decide proteger irmão.", flexible: "Objeto (TV, Vaso), Justificativa (Encosto), Vínculo (Separados 10 anos)." },
-            { id: 31, category: "Drama familiar", title: "O iPhone 15", sub: "Dívida de Status", summary: "Filho faz dívida de 4 mil no nome do pai para ostentar celular de luxo.", characters: "Pai: Justo. Luca: Cinânico/Deslumbrado. Mãe: Omissa.", pacing: "0-40s Mãe descobre dívida; 80-100s Filho sem remorso; 110-120s Pai vende celular.", flexible: "Objeto (iPhone, Tênis), Justificativa (Todo mundo tem), Lição (Vender para pagar)." },
-            { id: 32, category: "Drama familiar", title: "Teatro de Nicole", sub: "Sazonal (Maio/Agosto)", summary: "Jovem sofre perseguição silenciosa da filha ciumenta do padrasto.", characters: "Nicole: Vítima. Antagonista: Teatral/Vitimista. Pais: Enganados.", pacing: "45-75s Falsa evidência; 75-95s Reviravolta; 110-120s Conclusão/Reflexão.", flexible: "Gatilho (Roupa, Maquiagem), Falsa Prova (Mensagem falsa), Contra-ataque (Câmera)." },
-            { id: 33, category: "Drama familiar", title: "Sede de Ouro", sub: "Irmão Traidor", summary: "Irmão ambicioso tenta traficar a própria família por ganância.", characters: "Igor: Observador. Breno: Ambicioso (vilão). Letícia: Em pânico.", pacing: "40-80s Igor tenta avisar; 80-100s Revelação plano; 110-120s Gancho perigo.", flexible: "Motivo (Dívida agiota), Seguro (Delegacia, Interior), Armadilha (Viagem carro)." },
-
-            // DRAMA SOCIAL
-            { id: 34, category: "Drama social", title: "Honestidade", sub: "Bolsa no Lixo", summary: "Dilema ético: devolver dinheiro achado no lixo mesmo passando fome.", characters: "Irmã: Bússola moral. Irmão: Tentado. Policial: Invejoso.", pacing: "0-30s Achado; 60-90s Clímax policial; 90-120s Dono premia ética.", flexible: "Local (Lixo, Ônibus), Tentação (Aluguel, Remédio), Desfecho (Emprego)." },
-            { id: 35, category: "Drama social", title: "O Juiz Oculto", sub: "O Falso Cego", summary: "Empresário se finge de cego para testar honestidade de candidatos.", characters: "João: Íntegro. Ellen: Oportunista. Dono: Falso Cego.", pacing: "0-40s Desprezo vilãs; 40-80s Roubo e devolução; 100-120s Convite Gerente.", flexible: "Disfarce (Mendigo, Idoso), Ganância (Trocar dinheiro por pedra), Recompensa." },
-            { id: 36, category: "Drama social", title: "Inveja da Patroa", sub: "O Celular Escondido", summary: "Patroa tenta incriminar funcionário leal plantando prova na bolsa dela.", characters: "Patrão: Estratégico. Patroa: Invejosa. Kauã: Leal.", pacing: "0-40s Armadilha; 80-100s Patrão desmascara esposa; 110-120s Pedir desculpas.", flexible: "Item (Celular, Joia), Motivo (Inveja), Prova (Câmera nova escondida)." },
-            { id: 37, category: "Drama social", title: "O Balão da Madrasta", sub: "Falsa Gravidez", summary: "Madrasta finge gravidez com balão para isolar marido e enteada.", characters: "Pai: Estrategista. Madrasta: Perversa. Filha: Injustiçada.", pacing: "0-40s Acusação; 70-100s Revelação do balão; 110-120s Expulsão da vilã.", flexible: "Falsa Acusação (Balão, Droga), Motivo (Dinheiro faculdade), Flagra (Câmera sala)." },
-            { id: 38, category: "Drama social", title: "O Milagre do Pão", sub: "Dividir na Escassez", summary: "Garoto divide seu único pão com morador de rua e recebe milagre.", characters: "Garotinho: Generoso. Benfeitor: Observador. Vó: Fé.", pacing: "0-40s Sacrifício; 70-100s Envelope na porta; 100-120s Salmo 121.", flexible: "Doação (Pão, Casaco), Recompensa (Aluguel pago), Desfecho (Comentar Eu Creio)." },
-            { id: 39, category: "Drama social", title: "Gari e Interesseira", sub: "Lição no Restaurante", summary: "Mulher humilha gari e acaba tendo que lavar louça de conta cara.", characters: "Gari: Dignidade. Interesseira: Vilã. Rico: Amigo do gari.", pacing: "40-80s Humilhação; 80-100s Rico some com carteira; 110-120s Lavar louça.", flexible: "Profissão (Gari, Pedreiro), Local (Loja grife), Punição (Conta de 7 mil)." },
-            { id: 40, category: "Drama social", title: "Bullying Escolar", sub: "Sazonal (Aulas)", summary: "Zelador intervém em bullying contra novata e desafia mentiras.", characters: "Zelador: Autoridade. Novata: Alvo. Agressores: Debochados.", pacing: "0-15s Bullying novata; 75-100s Ameaça suspensão; 100-120s Final aberto.", flexible: "Conflito (Bullying), Prova (Câmeras), Punição (Expulsão)." },
-            { id: 41, category: "Drama social", title: "Limonada de 10 Reais", sub: "Tratamento Câncer", summary: "Irmãs humilhadas pelo preço alto revelam causa nobre: remédios.", characters: "Benfeitor: Justo. Rauan: Bully. Meninas: Batalhadoras.", pacing: "0-40s Humilhação preço; 40-70s Revelação Câncer; 100-120s Celebração cura.", flexible: "Produto (Doce, Desenho), Motivo (Câncer, Avó), Benfeitor (Empresário)." },
-            { id: 42, category: "Drama social", title: "Amiga Falsa", sub: "Roubo de Ideia", summary: "Amiga tenta roubar projeto de negócio para lucrar antes do dono.", characters: "Régis: Criativo. Karol: Falsa amiga. Surivan: Anjo da guarda.", pacing: "40-80s Confissão da vilã; 100-120s Régis protege ideia; 110-120s Pergunta.", flexible: "Roubo (Receita, Design), Descoberta (Áudio), Desfecho (Sócio investidor)." },
-            { id: 43, category: "Drama social", title: "Estacionamento", sub: "Deboche da Moto", summary: "Motociclista debocha de dona de garagem e tem veículo guinchado.", characters: "Dona: Consciente. Motociclista: Ousada. Guarda: Lei.", pacing: "0-40s Embate garagem; 80-100s Guincho acionado; 110-120s Vitória moral.", flexible: "Infração (Moto, Lixo), Deboche (Sabe com quem fala?), Punição (Pátio/Multa)." },
-            { id: 44, category: "Drama social", title: "Abandono", sub: "Reserva de Liberdade", summary: "Marido exausto foge da esposa exploradora usando reserva secreta.", characters: "Marido: Estratégico. Camila: Fútil/Exploradora. Sogra: Dreno.", pacing: "0-40s Gatilho unhas 200 reais; 70-100s Revelação reserva; 110-120s Abandono.", flexible: "Gasto (Unha, Viagem mãe), Negligência (Casa suja), Reserva (Maleta oculta)." },
-
-            // SUSPENSE
-            { id: 45, category: "Drama de suspense", title: "Teatro da Mentira", sub: "Lixo do Vizinho", summary: "Jovens forjam prova de lixo para vilanizar vizinho barulhento.", characters: "Alice: Mediadora. Letícia: Manipuladora. Breno: Vítima.", pacing: "30-60s Trama vingança; 60-90s Falsa prova; 110-120s Julgamento público.", flexible: "Motivo (Dancinha), Prova (Lixo podre), Vizinho (Mãe idosa)." },
-            { id: 46, category: "Drama de suspense", title: "Sorriso com Faca", sub: "Tony e a Empregada", summary: "Marido infiel inverte culpa e faz patroa expulsar empregada fiel.", characters: "Tony: Infiel. Nicole: Ingênua. Empregada: Testemunha.", pacing: "0-40s Flagrante; 100-120s Inversão de culpa; 110-120s Pergunta fidelidade.", flexible: "Prova (Foto, Batom), Álibi (Surpresa fofa), Patroa (Tapa/Inveja)." },
-            { id: 47, category: "Drama de suspense", title: "Perigo e Sobrevivência", sub: "O Sequestro", summary: "Policial usa códigos para detectar sequestro de bebê em abordagem.", characters: "Policial: Perspicaz. Sequestrador: Vilão. Mãe: Vítima.", pacing: "40-80s Pressão psicológica; 80-100s Revelação crime; 100-120s Plano tático.", flexible: "Pista (Sinal mão, Cabelo), Ameaça (Matar bebê), Tática (Rastreador)." }
+        // 脚本库全量数据 (基于CSV分析)
+        const scriptDatabase = [
+            {
+                id: "BR-001",
+                category: "Drama de relacionamento",
+                title: "Afeto Falso e Manipulação",
+                subTitle: "Padrões Duplos (O Confronto)",
+                difficulty: "Moderada",
+                summary: "Um namorado racional reage após ser oprimido por padrões duplos e manipulação emocional de sua parceira durante muito tempo.",
+                cast: "**Protagonista Masculino:** Racional, calmo mas decidido.\n**Protagonista Feminina:** Emocional, controladora, usa a inocência como defesa.",
+                pacing: [
+                    { time: "0-15s", action: "Comportamento extremo: A namorada explode por algo trivial, atraindo a atenção imediata." },
+                    { time: "15-45s", action: "Negação: A namorada finge inocência total, o público começa a duvidar de quem é o vilão." },
+                    { time: "45-75s", action: "A Prova: O namorado mostra o celular ou uma prova incontestável. A tensão sobe." },
+                    { time: "75-110s", action: "O Clímax: Discussão sobre valores. O namorado expõe a hipocrisia (Padrão Duplo)." },
+                    { time: "110-120s", action: "Desfecho: Expulsão ou término. Pergunta reflexiva ao público." }
+                ],
+                options: [
+                    { label: "Conflito Central", items: ["Conversar com ex", "Flertar com colega", "Apagar histórico", "Chantagem emocional"] },
+                    { label: "Evidência", items: ["Prints de WhatsApp", "Gravação de áudio", "Câmera de segurança", "Furo de mentira"] },
+                    { label: "Punição", items: ["Expulsão de casa", "Bloqueio total", "Expor para a família"] }
+                ],
+                accent: "var(--brazil-blue)"
+            },
+            {
+                id: "BR-002",
+                category: "Drama social",
+                title: "O Resgate do Policial",
+                subTitle: "Sinal Silencioso de Socorro",
+                difficulty: "Complexa",
+                summary: "Um policial astuto percebe um pedido de socorro silencioso durante uma abordagem de rotina e usa inteligência para salvar a vítima.",
+                cast: "**Policial:** Observador e heróico.\n**Vítima:** Sob coação, expressando medo apenas pelo olhar.\n**Vilão:** Agressivo e apressado.",
+                pacing: [
+                    { time: "0-30s", action: "Abordagem tensa: O carro parado, o vilão tenta ser simpático mas está nervoso." },
+                    { time: "30-50s", action: "O Sinal: A vítima faz um sinal discreto (mão ou piscar) que o público nota." },
+                    { time: "50-80s", action: "Intuição: O policial finge que vai liberar, mas prepara uma armadilha intelectual." },
+                    { time: "80-100s", action: "A Revelação: A vítima sussurra sobre o sequestro de um bebê ou ameaça." },
+                    { time: "100-120s", action: "Gancho: O policial usa um rastreador e pede reforços. Corte no momento da ação." }
+                ],
+                options: [
+                    { label: "Sinal de Socorro", items: ["Sinal de mão", "Piscar em código", "Objeto jogado", "Placa clonada"] },
+                    { label: "Ameaça do Vilão", items: ["Bebê no cativeiro", "Bomba no carro", "Comparsa na casa", "Fuga do país"] },
+                    { label: "Tática de Resgate", items: ["Rastreador discreto", "Forjar defeito no carro", "Negociador", "Emboscada"] }
+                ],
+                accent: "var(--brazil-green)"
+            },
+            {
+                id: "BR-003",
+                category: "Drama familiar",
+                title: "O Conflito do Apartamento",
+                subTitle: "Nora vs Sogra (Justiça)",
+                difficulty: "Simples",
+                summary: "Uma nora gananciosa tenta expulsar a sogra para vender a casa, mas o filho descobre os maus-tratos a tempo.",
+                cast: "**Sogra:** Humilde, fragilizada.\n**Nora:** Arrogante, focada no dinheiro.\n**Filho:** Trabalhador, descobre a verdade no final.",
+                pacing: [
+                    { time: "0-20s", action: "Humilhação: A nora joga as roupas da sogra no chão e grita." },
+                    { time: "20-60s", action: "Resistência: A sogra implora, citando que a casa era dela." },
+                    { time: "60-90s", action: "O Flagrante: O filho chega ou ouve a conversa por uma câmera/telefone." },
+                    { time: "90-120s", action: "Justiça: A nora é confrontada e expulsa. Lição sobre respeito aos idosos." }
+                ],
+                options: [
+                    { label: "Motivo da Venda", items: ["Pagar dívidas", "Viagem de luxo", "Novo apartamento", "Pura maldade"] },
+                    { label: "Forma de Descoberta", items: ["Câmera escondida", "Vizinho avisa", "Esquecer celular ligado"] },
+                    { label: "Castigo", items: ["Divórcio imediato", "Nora morar na rua", "Cortar mesada"] }
+                ],
+                accent: "#e11d48"
+            },
+            {
+                id: "BR-004",
+                category: "Drama social",
+                title: "Justiça no Restaurante",
+                subTitle: "Cliente Rico vs Garçom",
+                difficulty: "Moderada",
+                summary: "Um cliente arrogante humilha um garçom por um erro simples, sem saber que o dono do lugar está jantando ali disfarçado.",
+                cast: "**Rico Arrogante:** Usa roupas de marca, trata mal os outros.\n**Garçom:** Esforçado, educado.\n**Dono Disfarçado:** Roupas simples, observador.",
+                pacing: [
+                    { time: "0-15s", action: "O Erro: Um prato errado ou demora. O rico grita e insulta." },
+                    { time: "15-50s", action: "A Humilhação: O rico tenta fazer o garçom se ajoelhar ou limpar o chão." },
+                    { time: "50-90s", action: "Intervenção: O dono disfarçado defende o garçom e é insultado também." },
+                    { time: "90-120s", action: "A Revelação: O dono se identifica e expulsa o cliente permanentemente." }
+                ],
+                options: [
+                    { label: "Incidente", items: ["Vinho derramado", "Carne mal passada", "Demora no pedido"] },
+                    { label: "Humilhação", items: ["Jogar água", "Rasgar gorjeta", "Pedir demissão"] },
+                    { label: "Reviravolta", items: ["Dono é o pai", "Dono era o mendigo de antes"] }
+                ],
+                accent: "#f59e0b"
+            }
         ];
 
-        let favorites = JSON.parse(localStorage.getItem('fav_scripts_brazil')) || [];
+        // 渲染逻辑
+        function renderGrid(data) {
+            const grid = document.getElementById('main-grid');
+            const stats = document.getElementById('stats-info');
+            const empty = document.getElementById('empty-msg');
+            
+            grid.innerHTML = '';
+            stats.innerText = `${data.length} Roteiros Ativos`;
 
-        function render() {
-            const container = document.getElementById('main-container');
-            const search = document.getElementById('search').value.toLowerCase();
-            const cat = document.getElementById('cat-filter').value;
-
-            const filtered = scripts.filter(s => {
-                const matchSearch = s.title.toLowerCase().includes(search) || s.summary.toLowerCase().includes(search);
-                const matchCat = cat === 'all' || s.category === cat;
-                return matchSearch && matchCat;
-            });
-
-            container.innerHTML = filtered.map(s => createCard(s)).join('');
-            updateFavUI();
-        }
-
-        function createCard(s) {
-            const isFav = favorites.includes(s.id);
-            let tagClass = "tag-relacionamento";
-            if(s.category.includes("familiar")) tagClass = "tag-familiar";
-            if(s.category.includes("social")) tagClass = "tag-social";
-            if(s.category.includes("suspense")) tagClass = "tag-suspense";
-
-            return `
-                <div class="script-card bg-white rounded-[2rem] p-6 shadow-sm cursor-pointer relative" onclick="openModal(${s.id})">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase ${tagClass}">${s.category}</span>
-                        <button onclick="event.stopPropagation(); toggleFav(${s.id})" class="text-2xl ${isFav ? 'text-red-500' : 'text-slate-200'} transition transform hover:scale-110">
-                            <i class="${isFav ? 'fas' : 'far'} fa-heart"></i>
-                        </button>
-                    </div>
-                    <h3 class="text-base font-extrabold mb-1 text-slate-800 leading-tight">${s.title}</h3>
-                    <p class="text-brazil-green text-[10px] font-bold mb-3 uppercase tracking-widest">${s.sub}</p>
-                    <p class="text-slate-500 text-[11px] line-clamp-2 italic mb-4">"${s.summary}"</p>
-                    <div class="flex items-center gap-2 text-brazil-green font-bold text-[10px] uppercase">
-                        Explorar <i class="fas fa-arrow-right"></i>
-                    </div>
-                </div>
-            `;
-        }
-
-        function toggleFav(id) {
-            const idx = favorites.indexOf(id);
-            if(idx > -1) favorites.splice(idx, 1);
-            else favorites.push(id);
-            localStorage.setItem('fav_scripts_brazil', JSON.stringify(favorites));
-            render();
-        }
-
-        function updateFavUI() {
-            const section = document.getElementById('favorites-section');
-            const container = document.getElementById('fav-container');
-            const badge = document.getElementById('fav-badge');
-            if(favorites.length > 0) {
-                section.classList.remove('hidden');
-                badge.classList.remove('hidden');
-                badge.innerText = favorites.length;
-                const favData = scripts.filter(s => favorites.includes(s.id));
-                container.innerHTML = favData.map(s => createCard(s)).join('');
-            } else {
-                section.classList.add('hidden');
-                badge.classList.add('hidden');
+            if (data.length === 0) {
+                empty.classList.remove('hidden');
+                return;
             }
+            empty.classList.add('hidden');
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "script-card glass-card rounded-[2rem] p-6 cursor-pointer relative overflow-hidden group";
+                card.onclick = () => openModal(item);
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest badge-${item.difficulty.toLowerCase()}">
+                            ${item.difficulty}
+                        </span>
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 group-hover:text-rose-500 transition-colors">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">${item.category}</p>
+                        <h3 class="text-xl font-extrabold text-slate-800 leading-tight group-hover:text-green-700 transition-colors">${item.title}</h3>
+                        <p class="text-xs text-slate-500 mt-2 font-semibold italic">${item.subTitle}</p>
+                    </div>
+
+                    <p class="text-slate-600 text-sm line-clamp-2 mb-6 leading-relaxed">
+                        ${item.summary}
+                    </p>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <span class="text-[10px] font-bold text-slate-400">ID: ${item.id}</span>
+                        <div class="flex items-center text-green-600 font-bold text-xs uppercase tracking-wider">
+                            Ver Roteiro <i class="fas fa-arrow-right ml-2 transition-transform group-hover:translate-x-2"></i>
+                        </div>
+                    </div>
+
+                    <div class="absolute bottom-0 left-0 h-1 w-0 bg-green-500 transition-all duration-500 group-hover:w-full"></div>
+                `;
+                grid.appendChild(card);
+            });
         }
 
-        function openModal(id) {
-            const s = scripts.find(x => x.id === id);
-            document.getElementById('modal-title').innerText = s.title + " (" + s.sub + ")";
-            document.getElementById('modal-body').innerHTML = `
-                <div class="space-y-6">
-                    <section>
-                        <h4 class="text-brazil-green font-extrabold text-[10px] uppercase tracking-widest mb-1">Resumo</h4>
-                        <p class="text-sm text-slate-600 italic">"${s.summary}"</p>
-                    </section>
-                    <section>
-                        <h4 class="text-brazil-green font-extrabold text-[10px] uppercase tracking-widest mb-1">Personagens</h4>
-                        <p class="text-sm text-slate-600">${s.characters}</p>
-                    </section>
-                    <section class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                        <h4 class="text-orange-500 font-extrabold text-[10px] uppercase tracking-widest mb-2">Ritmo da Trama</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">${s.pacing}</p>
-                    </section>
-                    <section>
-                        <h4 class="text-blue-600 font-extrabold text-[10px] uppercase tracking-widest mb-2">Elementos Substituíveis</h4>
-                        <div class="flex flex-wrap gap-2">
-                            ${s.flexible.split(',').map(tag => `<span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-[10px] font-bold border border-blue-100">${tag.trim()}</span>`).join('')}
-                        </div>
-                    </section>
+        // 详情模态框逻辑
+        function openModal(item) {
+            const modal = document.getElementById('script-modal');
+            document.getElementById('modal-title').innerText = item.title;
+            document.getElementById('modal-category').innerText = item.category;
+            document.getElementById('modal-summary').innerText = item.summary;
+            document.getElementById('modal-cast').innerText = item.cast;
+            document.getElementById('modal-id').innerText = item.id;
+            
+            const badge = document.getElementById('modal-badge');
+            badge.innerText = item.difficulty;
+            badge.className = `px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-white text-slate-800`;
+
+            // 渲染节奏
+            const pacingContainer = document.getElementById('modal-pacing');
+            pacingContainer.innerHTML = item.pacing.map(p => `
+                <div class="flex gap-4 p-3 bg-white rounded-xl border border-slate-100 hover:border-green-200 transition-colors">
+                    <span class="font-black text-green-600 text-xs min-w-[50px]">${p.time}</span>
+                    <p class="text-sm text-slate-600">${p.action}</p>
                 </div>
-            `;
-            document.getElementById('modal').classList.remove('hidden');
+            `).join('');
+
+            // 渲染替换元素
+            const optionsContainer = document.getElementById('modal-options');
+            optionsContainer.innerHTML = item.options.map(opt => `
+                <div>
+                    <p class="text-[10px] font-black text-yellow-700 uppercase mb-2 tracking-widest">${opt.label}</p>
+                    <div class="flex flex-wrap gap-2">
+                        ${opt.items.map(i => `<span class="px-2 py-1 bg-white border border-yellow-200 text-yellow-800 rounded-lg text-[10px] font-bold">● ${i}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('script-modal').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
 
-        function scrollToSection(id) {
-            document.getElementById(id + '-section').scrollIntoView({ behavior: 'smooth' });
+        // 搜索与过滤
+        function applyFilters() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const category = document.getElementById('category-filter').value;
+            const difficulty = document.getElementById('diff-filter').value;
+
+            const filtered = scriptDatabase.filter(s => {
+                const matchesSearch = s.title.toLowerCase().includes(search) || 
+                                     s.summary.toLowerCase().includes(search) ||
+                                     s.subTitle.toLowerCase().includes(search);
+                const matchesCat = category === 'all' || s.category === category;
+                const matchesDiff = difficulty === 'all' || s.difficulty === difficulty;
+                return matchesSearch && matchesCat && matchesDiff;
+            });
+            renderGrid(filtered);
         }
 
-        document.getElementById('search').addEventListener('input', render);
-        document.getElementById('cat-filter').addEventListener('change', render);
-        window.onload = render;
+        function copyFullScript() {
+            const content = document.getElementById('modal-content')?.innerText || "Conteúdo do roteiro copiado!";
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = `ROTEIRO: ${document.getElementById('modal-title').innerText}\n\nRESUMO:\n${document.getElementById('modal-summary').innerText}\n\nPERSONAGENS:\n${document.getElementById('modal-cast').innerText}`;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+            alert("Roteiro copiado para a área de transferência!");
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 初始化
+        window.onload = () => {
+            renderGrid(scriptDatabase);
+            document.getElementById('search-input').addEventListener('input', applyFilters);
+            document.getElementById('category-filter').addEventListener('change', applyFilters);
+            document.getElementById('diff-filter').addEventListener('change', applyFilters);
+        };
     </script>
 </body>
 </html>
