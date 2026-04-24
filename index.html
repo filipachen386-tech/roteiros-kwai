@@ -3,391 +3,451 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hub de Roteiros Brasil - Biblioteca Viral</title>
+    <title>Premium Script Hub - Conteúdo Original</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap');
         
         :root {
-            --brazil-green: #009739;
-            --brazil-yellow: #FFDF00;
-            --brazil-blue: #002776;
+            --primary: #2e1065; 
+            --accent: #f59e0b;  
+            --bg-light: #f8fafc;
         }
 
         body { 
-            font-family: 'Open Sans', sans-serif; 
-            background-color: #f0f2f5;
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-light);
+            color: #1e293b;
+            -webkit-tap-highlight-color: transparent;
         }
         
-        h1, h2, h3, .font-title { 
-            font-family: 'Montserrat', sans-serif; 
-        }
+        h1, h2, h3, .font-display { font-family: 'Playfair Display', serif; }
 
-        .brazil-gradient {
-            background: linear-gradient(135deg, var(--brazil-green) 0%, #00702a 100%);
+        .theme-gradient {
+            background: linear-gradient(135deg, #2e1065 0%, #4c1d95 100%);
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: white;
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
-        .script-card {
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        .glass-card.is-favorite {
+            border-color: #f59e0b;
+            background-color: #fffbeb;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);
         }
 
-        .script-card:hover {
+        .glass-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 25px -5px rgba(46, 16, 101, 0.1);
         }
 
-        /* 自定义难度标签颜色 */
-        .badge-simples { background: #dcfce7; color: #15803d; }
-        .badge-moderada { background: #fef9c3; color: #854d0e; }
-        .badge-complexa { background: #fee2e2; color: #b91c1c; }
-
-        /* 自定义滚动条 */
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
         .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: var(--brazil-green); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 10px; }
 
-        @keyframes pulse-custom {
-            0% { box-shadow: 0 0 0 0 rgba(0, 151, 57, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 151, 57, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 151, 57, 0); }
-        }
-        .btn-live { animation: pulse-custom 2s infinite; }
+        .fav-active { color: #f59e0b !important; }
     </style>
 </head>
-<body class="text-slate-800">
+<body>
 
-    <!-- 顶部导航 / Header Estilo Brasil -->
-    <nav class="brazil-gradient text-white sticky top-0 z-50 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+    <!-- Header -->
+    <header class="theme-gradient text-white shadow-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="bg-white p-2 rounded-xl shadow-inner">
-                    <i class="fas fa-clapperboard text-green-700 text-2xl"></i>
+                <div class="w-10 h-10 bg-amber-400 rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-book-open text-purple-900 text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-extrabold tracking-tighter leading-none">ROTEIROS <span class="text-yellow-300">VIRAIS</span></h1>
-                    <p class="text-[10px] opacity-80 font-semibold tracking-widest uppercase">Estratégia & Retenção</p>
+                    <h1 class="text-xl font-black tracking-tight leading-none">Roteiros<span class="text-amber-400 font-light">Premium</span></h1>
+                    <p class="text-[8px] uppercase tracking-[0.2em] opacity-70 mt-1">Biblioteca de Roteiros Premium</p>
                 </div>
             </div>
-            <div class="flex items-center gap-6">
-                <div class="hidden md:block text-right">
-                    <p class="text-xs opacity-75">Base de Dados</p>
-                    <p class="font-bold text-yellow-300" id="stats-info">Carregando...</p>
-                </div>
-                <button onclick="scrollToSection('main-grid')" class="bg-yellow-400 hover:bg-yellow-300 text-green-900 px-4 py-2 rounded-full font-bold text-sm transition-all btn-live">
-                    Explorar
-                </button>
-            </div>
+            <button onclick="toggleShowFavorites()" id="fav-toggle-btn" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-all text-sm font-bold border border-white/10">
+                <i id="header-star-icon" class="far fa-star text-amber-400"></i>
+                <span>Minha Seleção</span>
+                <span id="fav-count" class="bg-amber-400 text-purple-900 px-2 py-0.5 rounded-md text-[10px] ml-1">0</span>
+            </button>
         </div>
-    </nav>
+    </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-8">
+    <main class="max-w-7xl mx-auto px-6 py-10">
         
-        <!-- 核心提示 / Intro -->
-        <section class="mb-10 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row items-center gap-6">
-            <div class="bg-blue-50 p-5 rounded-2xl">
-                <i class="fas fa-lightbulb text-blue-600 text-3xl"></i>
+        <!-- Vídeos de Referência (Exibidos em uma linha) -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold flex items-center gap-3 text-purple-900">
+                    <span class="w-2 h-8 bg-amber-500 rounded-full"></span>
+                    Vídeos de Referência
+                </h2>
             </div>
-            <div>
-                <h2 class="text-xl font-bold mb-1">Dica de Ouro para Criadores</h2>
-                <p class="text-slate-600 text-sm">O público brasileiro valoriza o **conflito emocional imediato**. Use os elementos "A/B/C/D" para adaptar o roteiro à sua realidade de cenário e atores.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Video 1: Relacionamento -->
+                <div class="group">
+                    <a href="https://www.kwai.com/@milacantinho/video/5197022600945057734" target="_blank">
+                        <div class="relative rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-purple-400 transition-all aspect-[9/16] bg-slate-200">
+                            <img src="https://bs3-hb1.corp.kuaishou.com/upload-noah/frame/9vBpvQwqA3_11_150108737376499_4080?AWSAccessKeyId=upload-noah&Expires=1777210918&Signature=sB2qeaAAtc0oV%2FMMGqFbsQIYme0%3D&sizeType=m" onerror="this.src='https://placehold.co/400x711/2e1065/ffffff?text=Drama+de+Relacionamento'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5">
+                                <span class="text-[10px] font-black text-white bg-purple-600 self-start px-3 py-1 rounded-full mb-2 uppercase">Drama de relacionamento</span>
+                                <p class="text-white font-bold text-xs">Assista no Kwai</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Video 2: Familiar -->
+                <div class="group">
+                    <a href="https://www.kwai.com/@familiacarvalhoof/video/5242621549000711605" target="_blank">
+                        <div class="relative rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-blue-400 transition-all aspect-[9/16] bg-slate-200">
+                            <img src="https://kwaipro-audit.yximgs.com/upic/2025/06/05/04/BMjAyNTA2MDUwNDExMTdfMTUwMDAxNjc1NzE0MTQwXzE1MDEwODk1NTA1OTA2MV8zXzM=_pcover_B9e9c06a8e0dcba6e7aa414ffa8e675c6.jpg?tag=1-1776950824-sp-0-bibwkcbbs7-102dfc9204137447" onerror="this.src='https://placehold.co/400x711/1e3a8a/ffffff?text=Drama+Familiar'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5">
+                                <span class="text-[10px] font-black text-white bg-blue-600 self-start px-3 py-1 rounded-full mb-2 uppercase">Drama familiar</span>
+                                <p class="text-white font-bold text-xs">Assista no Kwai</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Video 3: Social -->
+                <div class="group">
+                    <a href="https://www.kwai.com/@casaloficial124/video/5252191701258536973" target="_blank">
+                        <div class="relative rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-green-400 transition-all aspect-[9/16] bg-slate-200">
+                            <img src="https://bs3-hb1.corp.kuaishou.com/upload-noah/frame/bWNiByMkAC_11_150109651244175_1530?AWSAccessKeyId=upload-noah&Expires=1777211122&Signature=KuN44uQ0lfbfVaVasISEi9U2aGc%3D&sizeType=m" onerror="this.src='https://placehold.co/400x711/064e3b/ffffff?text=Drama+Social'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5">
+                                <span class="text-[10px] font-black text-white bg-green-600 self-start px-3 py-1 rounded-full mb-2 uppercase">Drama social</span>
+                                <p class="text-white font-bold text-xs">Assista no Kwai</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </section>
 
-        <!-- 过滤器 / Filtros -->
-        <div class="sticky top-24 z-40 mb-8 flex flex-wrap gap-3 bg-slate-50/80 backdrop-blur-md py-4 rounded-xl">
-            <div class="relative flex-grow min-w-[280px]">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="search-input" placeholder="Buscar por tema, personagem ou palavra-chave..." 
-                    class="w-full pl-12 pr-4 py-3 rounded-2xl border-none shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-green-500 outline-none transition">
+        <!-- Filtros -->
+        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 mb-10">
+            <div id="filter-title" class="hidden mb-4 px-2 flex items-center gap-2 text-amber-600 font-bold text-sm">
+                <i class="fas fa-star"></i> Mostrando apenas favoritos
             </div>
-            <select id="category-filter" class="px-4 py-3 rounded-2xl border-none shadow-sm ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-green-500 text-sm font-semibold">
-                <option value="all">Todas as Categorias</option>
-                <option value="Drama de relacionamento">Relacionamento</option>
-                <option value="Drama familiar">Familiar</option>
-                <option value="Drama social">Social/Moral</option>
-                <option value="Drama de suspense">Suspense</option>
-            </select>
-            <select id="diff-filter" class="px-4 py-3 rounded-2xl border-none shadow-sm ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-green-500 text-sm font-semibold">
-                <option value="all">Qualquer Dificuldade</option>
-                <option value="Simples">Simples</option>
-                <option value="Moderada">Moderada</option>
-                <option value="Complexa">Complexa</option>
-            </select>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="search-input" placeholder="Buscar no roteiro..." class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-purple-200 outline-none text-sm transition-all">
+                </div>
+                <select id="cat-filter" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-purple-200 outline-none text-sm font-semibold cursor-pointer">
+                    <option value="all">Todas as Categorias</option>
+                    <option value="Drama de relacionamento">Relacionamento</option>
+                    <option value="Drama social">Social</option>
+                    <option value="Drama de suspense">Suspense</option>
+                    <option value="Drama familiar">Familiar</option>
+                </select>
+                <select id="level-filter" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-purple-200 outline-none text-sm font-semibold cursor-pointer text-amber-700">
+                    <option value="all">Todos os Níveis</option>
+                    <option value="Simples">Simples</option>
+                    <option value="Médio">Médio</option>
+                    <option value="Difícil">Difícil</option>
+                </select>
+                <button onclick="resetFilters()" class="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-bold transition-all">
+                    Resetar Filtros
+                </button>
+            </div>
         </div>
 
-        <!-- 脚本网格 / Grid de Roteiros -->
-        <div id="main-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Dinâmico -->
+        <!-- Grid Container -->
+        <div id="script-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- JS Injected -->
         </div>
 
-        <!-- 加载更多提示 -->
-        <div id="empty-msg" class="hidden py-20 text-center text-slate-400">
-            <i class="fas fa-box-open text-5xl mb-4"></i>
-            <p>Nenhum roteiro encontrado para esses filtros.</p>
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center">
+            <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center text-slate-300 text-4xl mb-6">
+                <i class="fas fa-folder-open"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800">Nenhum roteiro encontrado</h3>
         </div>
     </main>
 
-    <!-- 详情模态框 / Modal Full Content -->
-    <div id="script-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onclick="closeModal()"></div>
-        <div class="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-[2rem] shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300">
-            
-            <!-- Modal Header -->
-            <div id="modal-header" class="p-6 md:p-8 text-white relative brazil-gradient">
-                <button onclick="closeModal()" class="absolute top-6 right-6 w-10 h-10 bg-black/20 hover:bg-black/40 rounded-full flex items-center justify-center transition">
+    <!-- Modal Detalhado -->
+    <div id="script-modal" class="fixed inset-0 z-[100] hidden overflow-hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md" onclick="closeModal()"></div>
+        <div class="relative bg-white w-full max-w-6xl h-[92vh] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col">
+            <div class="theme-gradient p-8 md:p-10 text-white relative flex-shrink-0">
+                <button onclick="closeModal()" class="absolute top-6 right-6 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all">
                     <i class="fas fa-times"></i>
                 </button>
-                <div class="flex items-center gap-3 mb-2">
-                    <span id="modal-badge" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-white text-green-800"></span>
-                    <span id="modal-category" class="text-xs font-bold opacity-80 uppercase tracking-tighter"></span>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <span id="modal-id" class="text-[10px] font-bold text-amber-400 tracking-widest bg-white/10 px-3 py-1 rounded"></span>
+                        <span id="modal-cat" class="text-sm font-black text-white uppercase tracking-widest bg-purple-950/30 px-3 py-1 rounded-lg border border-white/10"></span>
+                    </div>
+                    <span id="modal-level" class="text-xs font-black bg-amber-500 text-purple-950 px-4 py-1.5 rounded-full shadow-lg"></span>
                 </div>
-                <h2 id="modal-title" class="text-2xl md:text-3xl font-extrabold"></h2>
+                <h2 id="modal-title" class="text-2xl md:text-4xl font-black mb-2 leading-tight"></h2>
             </div>
-
-            <!-- Modal Body (Scrollable) -->
-            <div class="flex-grow overflow-y-auto p-6 md:p-10 custom-scroll bg-slate-50">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    
-                    <!-- Left: Core Info -->
-                    <div class="lg:col-span-7 space-y-8">
+            <div class="flex-grow overflow-y-auto p-8 md:p-10 custom-scroll">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    <div class="lg:col-span-7 space-y-10">
                         <section>
-                            <h3 class="text-green-700 font-black text-sm uppercase mb-3 flex items-center gap-2">
-                                <i class="fas fa-quote-left opacity-30"></i> Conceito Central
-                            </h3>
-                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm italic text-slate-700 leading-relaxed">
-                                <span id="modal-summary"></span>
+                            <h4 class="text-purple-900 font-black text-xs uppercase mb-4 tracking-widest flex items-center gap-2">
+                                <i class="fas fa-align-left text-amber-500"></i> Resumo do Conteúdo
+                            </h4>
+                            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-slate-700 italic">
+                                <p id="modal-resumo"></p>
                             </div>
                         </section>
-
                         <section>
-                            <h3 class="text-green-700 font-black text-sm uppercase mb-3 flex items-center gap-2">
-                                <i class="fas fa-clock"></i> Ritmo da Narrativa (Timeline)
-                            </h3>
-                            <div id="modal-pacing" class="space-y-3">
-                                <!-- 节奏点渲染 -->
-                            </div>
+                            <h4 class="text-purple-900 font-black text-xs uppercase mb-4 tracking-widest flex items-center gap-2">
+                                <i class="fas fa-clock text-amber-500"></i> Estrutura de Ritmo
+                            </h4>
+                            <div id="modal-ritmo" class="space-y-3"></div>
                         </section>
                     </div>
-
-                    <!-- Right: Elements & Cast -->
-                    <div class="lg:col-span-5 space-y-8">
-                        <section class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                            <h3 class="text-indigo-600 font-black text-sm uppercase mb-4 flex items-center gap-2">
+                    <div class="lg:col-span-5 space-y-10">
+                        <section class="bg-purple-50 p-6 rounded-3xl border border-purple-100">
+                            <h4 class="text-purple-900 font-black text-xs uppercase mb-4 tracking-widest">
                                 <i class="fas fa-users"></i> Perfis de Personagem
-                            </h3>
-                            <div id="modal-cast" class="text-slate-600 text-sm space-y-4 whitespace-pre-line"></div>
+                            </h4>
+                            <div id="modal-perfis" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed"></div>
                         </section>
-
-                        <section class="bg-yellow-50 p-6 rounded-3xl border border-yellow-100 shadow-sm">
-                            <h3 class="text-yellow-700 font-black text-sm uppercase mb-4 flex items-center gap-2">
-                                <i class="fas fa-shuffle"></i> Variantes (A/B/C/D)
-                            </h3>
-                            <div id="modal-options" class="space-y-4">
-                                <!-- 替换元素渲染 -->
-                            </div>
+                        <section id="modal-elementos-container" class="bg-amber-50/50 p-6 rounded-3xl border border-amber-100">
+                            <h4 class="text-amber-900 font-black text-xs uppercase mb-4 tracking-widest">
+                                <i class="fas fa-exchange-alt"></i> Elementos Substituíveis
+                            </h4>
+                            <div id="modal-elementos" class="space-y-6"></div>
                         </section>
                     </div>
-                </div>
-            </div>
-
-            <!-- Footer Action -->
-            <div class="p-6 bg-white border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-[10px] text-slate-400 font-bold uppercase">Código do Roteiro: <span id="modal-id"></span></p>
-                <div class="flex gap-3 w-full sm:w-auto">
-                    <button onclick="copyFullScript()" class="flex-grow sm:flex-grow-0 px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl transition shadow-lg shadow-green-100 flex items-center justify-center gap-2">
-                        <i class="fas fa-copy"></i> Copiar Tudo
-                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 脚本库全量数据 (基于CSV分析)
-        const scriptDatabase = [
+        const scriptData = [
             {
-                id: "BR-001",
-                category: "Drama de relacionamento",
-                title: "Afeto Falso e Manipulação",
-                subTitle: "Padrões Duplos (O Confronto)",
-                difficulty: "Moderada",
-                summary: "Um namorado racional reage após ser oprimido por padrões duplos e manipulação emocional de sua parceira durante muito tempo.",
-                cast: "**Protagonista Masculino:** Racional, calmo mas decidido.\n**Protagonista Feminina:** Emocional, controladora, usa a inocência como defesa.",
-                pacing: [
-                    { time: "0-15s", action: "Comportamento extremo: A namorada explode por algo trivial, atraindo a atenção imediata." },
-                    { time: "15-45s", action: "Negação: A namorada finge inocência total, o público começa a duvidar de quem é o vilão." },
-                    { time: "45-75s", action: "A Prova: O namorado mostra o celular ou uma prova incontestável. A tensão sobe." },
-                    { time: "75-110s", action: "O Clímax: Discussão sobre valores. O namorado expõe a hipocrisia (Padrão Duplo)." },
-                    { time: "110-120s", action: "Desfecho: Expulsão ou término. Pergunta reflexiva ao público." }
+                id: "Roteiro 1",
+                cat: "Drama de relacionamento",
+                title: "Afeto falso e manipulação emocional",
+                level: "Médio",
+                resumo: "Um namorado racional que foi oprimido por padrões duplos durante muito tempo e finalmente reage contra uma parceira emotiva com forte desejo de controle.",
+                perfis: "Protagonista masculino: Um namorado racional que foi oprimido por padrões duplos durante muito tempo e finalmente reage\n\nProtagonista feminina: Uma parceira emotiva com um forte desejo de controle, mas que racionaliza suas próprias ações",
+                ritmo: [
+                    ["0-15s", "O comportamento extremo no início atrai fortemente o público"],
+                    ["15-45s", "Progressão; a namorada finge inocência, deixando o público intrigado"],
+                    ["45-75s", "O protagonista masculino leva o espectador a olhar para o seu celular, uma reviravolta na trama que aumenta a tensão"],
+                    ["75-100s", "Atingindo o ápice emocional"],
+                    ["100-110s", "A discussão sobre o duplo padrão se intensifica, revelando um choque de valores"],
+                    ["110-120s", "O protagonista masculino expulsa a protagonista feminina; a protagonista feminina questiona o público"]
                 ],
-                options: [
-                    { label: "Conflito Central", items: ["Conversar com ex", "Flertar com colega", "Apagar histórico", "Chantagem emocional"] },
-                    { label: "Evidência", items: ["Prints de WhatsApp", "Gravação de áudio", "Câmera de segurança", "Furo de mentira"] },
-                    { label: "Punição", items: ["Expulsão de casa", "Bloqueio total", "Expor para a família"] }
-                ],
-                accent: "var(--brazil-blue)"
+                elementos: [
+                    { t: "Conflito Central", i: ["A. Conversar com um ex", "B. Flertar com um colega de trabalho", "C. Conversa até tarde da noite", "D. Apagar o histórico de conversas"] },
+                    { t: "Formas de Evidência", i: ["A. Capturas de tela", "B. Gravações de voz", "C. Câmeras de segurança", "D. Denúncia de amigo"] },
+                    { t: "Dupla Medida", i: ["A. Proibir contato com sexo oposto", "B. Verificar celular", "C. Controlar vida social", "D. Chantagem emocional"] },
+                    { t: "Métodos de Punição", i: ["A. Expulsá-la de casa", "B. Terminar o relacionamento", "C. Devolver presentes", "D. Expor a verdade para os pais"] }
+                ]
             },
             {
-                id: "BR-002",
-                category: "Drama social",
-                title: "O Resgate do Policial",
-                subTitle: "Sinal Silencioso de Socorro",
-                difficulty: "Complexa",
-                summary: "Um policial astuto percebe um pedido de socorro silencioso durante uma abordagem de rotina e usa inteligência para salvar a vítima.",
-                cast: "**Policial:** Observador e heróico.\n**Vítima:** Sob coação, expressando medo apenas pelo olhar.\n**Vilão:** Agressivo e apressado.",
-                pacing: [
-                    { time: "0-30s", action: "Abordagem tensa: O carro parado, o vilão tenta ser simpático mas está nervoso." },
-                    { time: "30-50s", action: "O Sinal: A vítima faz um sinal discreto (mão ou piscar) que o público nota." },
-                    { time: "50-80s", action: "Intuição: O policial finge que vai liberar, mas prepara uma armadilha intelectual." },
-                    { time: "80-100s", action: "A Revelação: A vítima sussurra sobre o sequestro de um bebê ou ameaça." },
-                    { time: "100-120s", action: "Gancho: O policial usa um rastreador e pede reforços. Corte no momento da ação." }
+                id: "Roteiro 2",
+                cat: "Drama social",
+                title: "Sinal de socorro silencioso",
+                level: "Difícil",
+                resumo: "Um policial percebe um pedido de socorro silencioso e salva a vítima de um sequestrador agressivo.",
+                perfis: "Policial: Observador, experiente, mantém a calma sob pressão.\n\nVítima: Aterrorizada, tenta desesperadamente comunicar o perigo sem alertar o agressor.\n\nSequestrador: Impulsivo, violento e usa um 'gancho' (como um bebê) para garantir a obediência.",
+                ritmo: [
+                    ["0-30s", "O policial aborda um carro suspeito. Tensão alta."],
+                    ["30-50s", "O agressor finge normalidade enquanto a vítima faz o sinal silencioso."],
+                    ["50-80s", "O policial entende o sinal e começa um jogo psicológico para ganhar tempo."],
+                    ["80-100s", "A vítima revela a ameaça real (ex: bebê em perigo)."],
+                    ["100-120s", "O policial usa tática de inteligência (rastreador) em vez de força bruta."]
                 ],
-                options: [
-                    { label: "Sinal de Socorro", items: ["Sinal de mão", "Piscar em código", "Objeto jogado", "Placa clonada"] },
-                    { label: "Ameaça do Vilão", items: ["Bebê no cativeiro", "Bomba no carro", "Comparsa na casa", "Fuga do país"] },
-                    { label: "Tática de Resgate", items: ["Rastreador discreto", "Forjar defeito no carro", "Negociador", "Emboscada"] }
-                ],
-                accent: "var(--brazil-green)"
+                elementos: [
+                    { t: "Pista Inicial", i: ["A. Cabelo saindo pelo porta-malas", "B. Sinal de socorro com a mão", "C. Placa clonada", "D. Vítima piscando em código"] },
+                    { t: "Ameaça do Vilão", i: ["A. Matar o bebê", "B. Comparsa na casa da família", "C. Dispositivo perigoso no carro", "D. Fugir para outro estado"] },
+                    { t: "Tática de Resgate", i: ["A. Uso de rastreador discreto", "B. Forjar defeito no carro", "C. Chamar negociador", "D. Fingir aceitar suborno"] }
+                ]
             },
             {
-                id: "BR-003",
-                category: "Drama familiar",
-                title: "O Conflito do Apartamento",
-                subTitle: "Nora vs Sogra (Justiça)",
-                difficulty: "Simples",
-                summary: "Uma nora gananciosa tenta expulsar a sogra para vender a casa, mas o filho descobre os maus-tratos a tempo.",
-                cast: "**Sogra:** Humilde, fragilizada.\n**Nora:** Arrogante, focada no dinheiro.\n**Filho:** Trabalhador, descobre a verdade no final.",
-                pacing: [
-                    { time: "0-20s", action: "Humilhação: A nora joga as roupas da sogra no chão e grita." },
-                    { time: "20-60s", action: "Resistência: A sogra implora, citando que a casa era dela." },
-                    { time: "60-90s", action: "O Flagrante: O filho chega ou ouve a conversa por uma câmera/telefone." },
-                    { time: "90-120s", action: "Justiça: A nora é confrontada e expulsa. Lição sobre respeito aos idosos." }
+                id: "Roteiro 3",
+                cat: "Drama de suspense",
+                title: "O perigo está dentro de casa (Padrasto)",
+                level: "Médio",
+                resumo: "Uma filha tenta alertar a mãe sobre o comportamento predatório do padrasto, mas enfrenta a descrença inicial até que a verdade é revelada.",
+                perfis: "Mãe: Dividida entre o novo amor e a proteção da filha.\n\nFilha: Vulnerável, mas corajosa ao buscar provas.\n\nPadrasto: Manipulador, esconde sua verdadeira face atrás de uma imagem de 'bom provedor'.",
+                ritmo: [
+                    ["0-25s", "A filha é flagrada pelo padrasto em uma situation de desconforto."],
+                    ["25-55s", "A filha tenta contar à mãe, mas é silenciada ou desacreditada."],
+                    ["55-85s", "Uma pista física é encontrada (ex: câmera oculta ou diário)."],
+                    ["85-110s", "Confronto final onde a mãe testemunha a verdadeira face dele."],
+                    ["110-120s", "A expulsão definitiva e o alívio emocional."]
                 ],
-                options: [
-                    { label: "Motivo da Venda", items: ["Pagar dívidas", "Viagem de luxo", "Novo apartamento", "Pura maldade"] },
-                    { label: "Forma de Descoberta", items: ["Câmera escondida", "Vizinho avisa", "Esquecer celular ligado"] },
-                    { label: "Castigo", items: ["Divórcio imediato", "Nora morar na rua", "Cortar mesada"] }
-                ],
-                accent: "#e11d48"
+                elementos: [
+                    { t: "Pista Oculta", i: ["A. Câmera no urso de pelúcia", "B. Mensagens no tablet", "C. Histórico do navegador", "D. Gravação de áudio"] },
+                    { t: "Reação da Mãe", i: ["A. Expulsão imediata", "B. Chamar a polícia", "C. Plano de vingança", "D. Fuga estratégica"] }
+                ]
             },
             {
-                id: "BR-004",
-                category: "Drama social",
-                title: "Justiça no Restaurante",
-                subTitle: "Cliente Rico vs Garçom",
-                difficulty: "Moderada",
-                summary: "Um cliente arrogante humilha um garçom por um erro simples, sem saber que o dono do lugar está jantando ali disfarçado.",
-                cast: "**Rico Arrogante:** Usa roupas de marca, trata mal os outros.\n**Garçom:** Esforçado, educado.\n**Dono Disfarçado:** Roupas simples, observador.",
-                pacing: [
-                    { time: "0-15s", action: "O Erro: Um prato errado ou demora. O rico grita e insulta." },
-                    { time: "15-50s", action: "A Humilhação: O rico tenta fazer o garçom se ajoelhar ou limpar o chão." },
-                    { time: "50-90s", action: "Intervenção: O dono disfarçado defende o garçom e é insultado também." },
-                    { time: "90-120s", action: "A Revelação: O dono se identifica e expulsa o cliente permanentemente." }
+                id: "Roteiro 4",
+                cat: "Drama familiar",
+                title: "A Madrasta e a Ganância",
+                level: "Simples",
+                resumo: "Conflito sobre a herança de um pai falecido, onde a madrasta tenta deserdar o filho legítimo.",
+                perfis: "Madrasta: Fria, movida por interesses financeiros.\n\nFilho/Enteado: Honrado, mas injustiçado.\n\nAdvogado/Testemunha: O elemento surpresa que detém a verdade.",
+                ritmo: [
+                    ["0-30s", "A madrasta humilha o enteado logo após o funeral."],
+                    ["30-60s", "Ela revela que 'não sobrou nada' para ele no testamento falso."],
+                    ["60-90s", "O filho descobre um testamento real ou um vídeo de despedida."],
+                    ["90-110s", "A revelação pública da fraude durante a leitura oficial."],
+                    ["110-120s", "A justiça sendo feita e a madrasta saindo sem nada."]
                 ],
-                options: [
-                    { label: "Incidente", items: ["Vinho derramado", "Carne mal passada", "Demora no pedido"] },
-                    { label: "Humilhação", items: ["Jogar água", "Rasgar gorjeta", "Pedir demissão"] },
-                    { label: "Reviravolta", items: ["Dono é o pai", "Dono era o mendigo de antes"] }
+                elementos: [
+                    { t: "Prova da Fraude", i: ["A. Assinatura falsificada", "B. Vídeo de segurança", "C. Testemunha ocular (mordomo)", "D. Cofre secreto"] },
+                    { t: "Desfecho da Vilã", i: ["A. Prisão", "B. Falência", "C. Expulsão da mansão", "D. Desonra pública"] }
+                ]
+            },
+            {
+                id: "Roteiro 5",
+                cat: "Drama familiar",
+                title: "Despertar sob Opressão Materna",
+                level: "Médio",
+                resumo: "Uma mãe controladora que vê as filhas como bens materiais até que a irmandade desperta para a liberdade.",
+                perfis: "Mãe: Governante patológica, vaidosa e manipuladora.\n\nFilhas: Diferentes entre si (ex: obediente vs rebelde), mas unidas pelo destino compartilhado.",
+                ritmo: [
+                    ["0-20s", "Gancho forte: Uma punição injusta ou humilhação pública."],
+                    ["20-50s", "Apresentação da hierarquia familiar rígida."],
+                    ["50-80s", "O ponto de virada: Uma das filhas descobre uma mentira grave da mãe."],
+                    ["80-100s", "Mudança de medo para determinação. O despertar."],
+                    ["100-120s", "A união das irmãs contra a opressão. Suspense final."]
                 ],
-                accent: "#f59e0b"
+                elementos: [
+                    { t: "Desculpas da Mãe", i: ["A. Casamento arranjado", "B. Pagar dívidas do irmão", "C. Notas exemplares", "D. Herdar o negócio"] },
+                    { t: "Contraste da Filha", i: ["A. Andrógina vs Feminina", "B. Nerd vs Rebelde", "C. Gorda vs Magra", "D. Obediente vs Questionadora"] },
+                    { t: "Retaliação", i: ["A. Fugir de casa", "B. Rasgar carta de aceitação falsa", "C. Chamar polícia", "D. Abrir próprio negócio"] }
+                ]
             }
         ];
 
-        // 渲染逻辑
-        function renderGrid(data) {
-            const grid = document.getElementById('main-grid');
-            const stats = document.getElementById('stats-info');
-            const empty = document.getElementById('empty-msg');
-            
-            grid.innerHTML = '';
-            stats.innerText = `${data.length} Roteiros Ativos`;
+        let favorites = JSON.parse(localStorage.getItem('premium_scripts_favs')) || [];
+        let showFavoritesOnly = false;
 
-            if (data.length === 0) {
-                empty.classList.remove('hidden');
-                return;
+        function toggleFavorite(id, event) {
+            event.stopPropagation();
+            const index = favorites.indexOf(id);
+            if (index === -1) favorites.push(id);
+            else favorites.splice(index, 1);
+            localStorage.setItem('premium_scripts_favs', JSON.stringify(favorites));
+            updateFavStats();
+            render(filterLogic());
+        }
+
+        function updateFavStats() {
+            document.getElementById('fav-count').innerText = favorites.length;
+        }
+
+        function toggleShowFavorites() {
+            showFavoritesOnly = !showFavoritesOnly;
+            const btn = document.getElementById('fav-toggle-btn');
+            const icon = document.getElementById('header-star-icon');
+            const filterTitle = document.getElementById('filter-title');
+
+            if (showFavoritesOnly) {
+                btn.classList.add('bg-amber-400', 'text-purple-900');
+                icon.classList.replace('far', 'fas');
+                filterTitle.classList.remove('hidden');
+            } else {
+                btn.classList.remove('bg-amber-400', 'text-purple-900');
+                icon.classList.replace('fas', 'far');
+                filterTitle.classList.add('hidden');
             }
-            empty.classList.add('hidden');
+            render(filterLogic());
+        }
 
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = "script-card glass-card rounded-[2rem] p-6 cursor-pointer relative overflow-hidden group";
-                card.onclick = () => openModal(item);
-                
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-6">
-                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest badge-${item.difficulty.toLowerCase()}">
-                            ${item.difficulty}
-                        </span>
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 group-hover:text-rose-500 transition-colors">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">${item.category}</p>
-                        <h3 class="text-xl font-extrabold text-slate-800 leading-tight group-hover:text-green-700 transition-colors">${item.title}</h3>
-                        <p class="text-xs text-slate-500 mt-2 font-semibold italic">${item.subTitle}</p>
-                    </div>
-
-                    <p class="text-slate-600 text-sm line-clamp-2 mb-6 leading-relaxed">
-                        ${item.summary}
-                    </p>
-
-                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-                        <span class="text-[10px] font-bold text-slate-400">ID: ${item.id}</span>
-                        <div class="flex items-center text-green-600 font-bold text-xs uppercase tracking-wider">
-                            Ver Roteiro <i class="fas fa-arrow-right ml-2 transition-transform group-hover:translate-x-2"></i>
-                        </div>
-                    </div>
-
-                    <div class="absolute bottom-0 left-0 h-1 w-0 bg-green-500 transition-all duration-500 group-hover:w-full"></div>
-                `;
-                grid.appendChild(card);
+        function filterLogic() {
+            const term = document.getElementById('search-input').value.toLowerCase();
+            const cat = document.getElementById('cat-filter').value;
+            const level = document.getElementById('level-filter').value;
+            
+            return scriptData.filter(s => {
+                const matchSearch = s.title.toLowerCase().includes(term) || s.resumo.toLowerCase().includes(term);
+                const matchCat = cat === 'all' || s.cat === cat;
+                const matchLevel = level === 'all' || s.level === level;
+                const matchFav = showFavoritesOnly ? favorites.includes(s.id) : true;
+                return matchSearch && matchCat && matchLevel && matchFav;
             });
         }
 
-        // 详情模态框逻辑
-        function openModal(item) {
-            const modal = document.getElementById('script-modal');
-            document.getElementById('modal-title').innerText = item.title;
-            document.getElementById('modal-category').innerText = item.category;
-            document.getElementById('modal-summary').innerText = item.summary;
-            document.getElementById('modal-cast').innerText = item.cast;
-            document.getElementById('modal-id').innerText = item.id;
-            
-            const badge = document.getElementById('modal-badge');
-            badge.innerText = item.difficulty;
-            badge.className = `px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-white text-slate-800`;
+        function filterContent() { render(filterLogic()); }
 
-            // 渲染节奏
-            const pacingContainer = document.getElementById('modal-pacing');
-            pacingContainer.innerHTML = item.pacing.map(p => `
-                <div class="flex gap-4 p-3 bg-white rounded-xl border border-slate-100 hover:border-green-200 transition-colors">
-                    <span class="font-black text-green-600 text-xs min-w-[50px]">${p.time}</span>
-                    <p class="text-sm text-slate-600">${p.action}</p>
-                </div>
-            `).join('');
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('cat-filter').value = 'all';
+            document.getElementById('level-filter').value = 'all';
+            showFavoritesOnly = false;
+            document.getElementById('fav-toggle-btn').classList.remove('bg-amber-400', 'text-purple-900');
+            document.getElementById('header-star-icon').classList.replace('fas', 'far');
+            document.getElementById('filter-title').classList.add('hidden');
+            render(scriptData);
+        }
 
-            // 渲染替换元素
-            const optionsContainer = document.getElementById('modal-options');
-            optionsContainer.innerHTML = item.options.map(opt => `
+        function render(data) {
+            const grid = document.getElementById('script-grid');
+            const empty = document.getElementById('empty-state');
+            grid.innerHTML = '';
+            if (data.length === 0) {
+                empty.classList.remove('hidden');
+                grid.classList.add('hidden');
+            } else {
+                empty.classList.add('hidden');
+                grid.classList.remove('hidden');
+                data.forEach(s => {
+                    const isFav = favorites.includes(s.id);
+                    const card = document.createElement('div');
+                    card.className = `glass-card rounded-[2rem] p-8 cursor-pointer flex flex-col h-full ${isFav ? 'is-favorite' : ''}`;
+                    card.onclick = () => openModal(s);
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase bg-slate-100 text-slate-600 tracking-wider border border-slate-200/50">${s.cat}</span>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[12px] font-black text-amber-600 tracking-wide uppercase">${s.level}</span>
+                                <button onclick="toggleFavorite('${s.id}', event)" class="w-9 h-9 rounded-full flex items-center justify-center transition-all bg-white shadow-sm border border-slate-100 hover:scale-110 active:scale-95">
+                                    <i class="${isFav ? 'fas fav-active' : 'far'} fa-star text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-bold text-slate-800 mb-4 leading-tight">${s.title}</h3>
+                            <p class="text-slate-500 text-xs line-clamp-3 italic border-l-4 border-amber-400 pl-4 bg-slate-50/50 py-3 rounded-r-xl">"${s.resumo}"</p>
+                        </div>
+                        <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-slate-300">${s.id}</span>
+                            <div class="text-purple-900 font-black text-[10px] uppercase tracking-widest flex items-center gap-1 group-hover:text-amber-600 transition-colors">Ver Estrutura <i class="fas fa-arrow-right text-[8px]"></i></div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        function openModal(s) {
+            document.getElementById('modal-title').innerText = s.title;
+            document.getElementById('modal-cat').innerText = s.cat;
+            document.getElementById('modal-level').innerText = s.level;
+            document.getElementById('modal-resumo').innerText = s.resumo;
+            document.getElementById('modal-id').innerText = s.id;
+            document.getElementById('modal-ritmo').innerHTML = s.ritmo.map(r => `
+                <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <span class="font-black text-purple-900 text-[10px] min-w-[60px] bg-purple-100 px-2 py-1 rounded text-center">${r[0]}</span>
+                    <p class="text-slate-600 text-xs font-medium">${r[1]}</p>
+                </div>`).join('');
+            document.getElementById('modal-perfis').innerText = s.perfis;
+            const elemContainer = document.getElementById('modal-elementos');
+            elemContainer.innerHTML = s.elementos.map(e => `
                 <div>
-                    <p class="text-[10px] font-black text-yellow-700 uppercase mb-2 tracking-widest">${opt.label}</p>
-                    <div class="flex flex-wrap gap-2">
-                        ${opt.items.map(i => `<span class="px-2 py-1 bg-white border border-yellow-200 text-yellow-800 rounded-lg text-[10px] font-bold">● ${i}</span>`).join('')}
-                    </div>
-                </div>
-            `).join('');
-
-            modal.classList.remove('hidden');
+                    <p class="text-[10px] font-black text-amber-800 uppercase mb-3 flex items-center gap-2"><span class="w-1 h-1 bg-amber-500 rounded-full"></span> ${e.t}</p>
+                    <div class="grid grid-cols-1 gap-2">${e.i.map(item => `<div class="bg-white px-4 py-2 rounded-xl border border-amber-100 text-[11px] text-slate-600 shadow-sm">${item}</div>`).join('')}</div>
+                </div>`).join('');
+            document.getElementById('script-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
@@ -396,45 +456,10 @@
             document.body.style.overflow = 'auto';
         }
 
-        // 搜索与过滤
-        function applyFilters() {
-            const search = document.getElementById('search-input').value.toLowerCase();
-            const category = document.getElementById('category-filter').value;
-            const difficulty = document.getElementById('diff-filter').value;
-
-            const filtered = scriptDatabase.filter(s => {
-                const matchesSearch = s.title.toLowerCase().includes(search) || 
-                                     s.summary.toLowerCase().includes(search) ||
-                                     s.subTitle.toLowerCase().includes(search);
-                const matchesCat = category === 'all' || s.category === category;
-                const matchesDiff = difficulty === 'all' || s.difficulty === difficulty;
-                return matchesSearch && matchesCat && matchesDiff;
-            });
-            renderGrid(filtered);
-        }
-
-        function copyFullScript() {
-            const content = document.getElementById('modal-content')?.innerText || "Conteúdo do roteiro copiado!";
-            const dummy = document.createElement("textarea");
-            document.body.appendChild(dummy);
-            dummy.value = `ROTEIRO: ${document.getElementById('modal-title').innerText}\n\nRESUMO:\n${document.getElementById('modal-summary').innerText}\n\nPERSONAGENS:\n${document.getElementById('modal-cast').innerText}`;
-            dummy.select();
-            document.execCommand("copy");
-            document.body.removeChild(dummy);
-            alert("Roteiro copiado para a área de transferência!");
-        }
-
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // 初始化
-        window.onload = () => {
-            renderGrid(scriptDatabase);
-            document.getElementById('search-input').addEventListener('input', applyFilters);
-            document.getElementById('category-filter').addEventListener('change', applyFilters);
-            document.getElementById('diff-filter').addEventListener('change', applyFilters);
-        };
+        document.getElementById('search-input').oninput = filterContent;
+        document.getElementById('cat-filter').onchange = filterContent;
+        document.getElementById('level-filter').onchange = filterContent;
+        window.onload = () => { render(scriptData); updateFavStats(); };
     </script>
 </body>
 </html>
