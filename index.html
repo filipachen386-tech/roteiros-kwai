@@ -3,483 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Script Hub - Conteúdo Original</title>
+    <title>Biblioteca de Scripts - Abril</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap');
+        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .tab-active { border-bottom: 3px solid #3b82f6; color: #3b82f6; font-weight: bold; }
+        .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .copy-toast { visibility: hidden; min-width: 200px; margin-left: -100px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 12px; position: fixed; z-index: 100; left: 50%; bottom: 30px; }
+        .copy-toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
         
-        :root {
-            --primary: #2e1065; 
-            --accent: #f59e0b;  
-            --bg-light: #f8fafc;
-        }
-
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-light);
-            color: #1e293b;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        h1, h2, h3, .font-display { font-family: 'Playfair Display', serif; }
-
-        .theme-gradient {
-            background: linear-gradient(135deg, #2e1065 0%, #4c1d95 100%);
-        }
-
-        .glass-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .glass-card.is-favorite {
-            border-color: #f59e0b;
-            background-color: #fffbeb;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);
-        }
-
-        .glass-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(46, 16, 101, 0.1);
-        }
-
-        .custom-scroll::-webkit-scrollbar { width: 8px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 10px; }
-
-        .fav-active { color: #f59e0b !important; }
-
-        /* 优化长标签溢出 */
-        .category-badge {
-            max-width: 140px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+        .script-content { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .script-card.active .script-content { max-height: 10000px; }
+        .script-card.active .chevron-icon { transform: rotate(180deg); }
+        .script-card.active { border-color: #3b82f6; ring: 2px solid #3b82f6; }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="theme-gradient text-white shadow-xl sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-amber-400 rounded-xl flex items-center justify-center shadow-lg">
-                    <i class="fas fa-book-open text-purple-900 text-lg"></i>
+    <div id="toast" class="copy-toast">Link copiado!</div>
+
+    <header class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-scroll text-blue-600 text-2xl"></i>
+                    <h1 class="text-xl font-bold text-gray-800">ScriptBank <span class="text-blue-600">Visual</span></h1>
                 </div>
-                <div>
-                    <h1 class="text-xl font-black tracking-tight leading-none">Roteiros<span class="text-amber-400 font-light">Premium</span></h1>
-                    <p class="text-[8px] uppercase tracking-[0.2em] opacity-70 mt-1">Biblioteca de Roteiros Premium</p>
-                </div>
+                <nav class="flex gap-6 text-gray-500">
+                    <a href="#" class="tab-active py-5 px-1">Abril</a>
+                    <a href="#" class="py-5 px-1 hover:text-gray-700 transition">Maio</a>
+                    <a href="#" class="py-5 px-1 hover:text-gray-700 transition">Junho</a>
+                </nav>
             </div>
-            <button onclick="toggleShowFavorites()" id="fav-toggle-btn" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-all text-sm font-bold border border-white/10">
-                <i id="header-star-icon" class="far fa-star text-amber-400"></i>
-                <span>Minha Seleção</span>
-                <span id="fav-count" class="bg-amber-400 text-purple-900 px-2 py-0.5 rounded-md text-[10px] ml-1">0</span>
-            </button>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 py-10">
+    <section class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white p-6 rounded-xl card-shadow flex flex-wrap gap-4 items-end border border-gray-100">
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tema do Script</label>
+                <select class="w-full border rounded-lg p-2.5 bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="all">Todos os Temas (Abril)</option>
+                    <option value="drama">Drama de relacionamento</option>
+                </select>
+            </div>
+            <button class="bg-blue-600 text-white px-8 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2 shadow-md">
+                <i class="fa-solid fa-magnifying-glass"></i> Filtrar Scripts
+            </button>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 pb-20 space-y-6">
         
-        <!-- 激励文字与筛选区 -->
-        <div class="mb-10">
-            <!-- 新增激励文字 -->
-            <div class="flex items-center gap-4 mb-6 px-2">
-                <div class="h-[1px] flex-grow bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
-                <p class="text-slate-400 italic text-sm font-light tracking-wide">
-                    "Cada grande vídeo começa com uma ideia corajosa. Transforme roteiros em realidade."
-                </p>
-                <div class="h-[1px] flex-grow bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
-            </div>
-
-            <!-- Filtros (顶部搜索) -->
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
-                <div id="filter-title" class="hidden mb-4 px-2 flex items-center gap-2 text-amber-600 font-bold text-sm">
-                    <i class="fas fa-star"></i> Mostrando apenas favoritos
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="relative">
-                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="search-input" placeholder="Buscar no roteiro..." class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-purple-200 outline-none text-sm transition-all text-slate-700">
+        <!-- SCRIPT 1 -->
+        <article class="script-card bg-white rounded-2xl card-shadow overflow-hidden border border-gray-100 transition-all duration-300 shadow-sm">
+            <div onclick="toggleScript(this.parentElement)" class="p-6 cursor-pointer hover:bg-gray-50 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">1</div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Colapso da confiança e jogo de lealdade (V1)</h2>
+                        <p class="text-gray-500 text-sm italic">Abril | Drama de relacionamento | Tema viral</p>
                     </div>
-                    <select id="cat-filter" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-purple-200 outline-none text-sm font-semibold cursor-pointer">
-                        <option value="all">Todas as Categorias</option>
-                        <option value="Drama de relacionamento">Relacionamento</option>
-                        <option value="Drama social">Social</option>
-                        <option value="Drama de suspense">Suspense</option>
-                        <option value="Drama familiar">Familiar</option>
-                    </select>
-                    <select id="level-filter" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-purple-200 outline-none text-sm font-semibold cursor-pointer text-amber-700">
-                        <option value="all">Todos os Níveis</option>
-                        <option value="Simples">Simples</option>
-                        <option value="Médio">Médio</option>
-                        <option value="Difícil">Difícil</option>
-                    </select>
-                    <button onclick="resetFilters()" class="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-bold transition-all">
-                        Resetar Filtros
+                </div>
+                <div class="flex items-center gap-4">
+                    <i class="fa-solid fa-chevron-down text-gray-400 chevron-icon transition-transform duration-300"></i>
+                </div>
+            </div>
+
+            <div class="script-content border-t bg-white">
+                <div class="p-6 bg-slate-50 border-b flex justify-end gap-3">
+                    <button onclick="copyLink('https://www.kwai.com/@Bondadee/video/5248251051282490911')" class="text-blue-600 hover:text-blue-700 flex items-center gap-2 font-semibold bg-white px-5 py-2.5 rounded-lg transition border border-blue-200 shadow-sm">
+                        <i class="fa-solid fa-copy"></i> Copiar Link
                     </button>
+                    <a href="https://www.kwai.com/@Bondadee/video/5248251051282490911" target="_blank" class="text-orange-500 hover:text-orange-600 flex items-center gap-2 font-semibold bg-white px-5 py-2.5 rounded-lg transition border border-orange-200 shadow-sm">
+                        <i class="fa-solid fa-play"></i> Assistir Exemplo
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x">
+                    <div class="p-6 space-y-8 bg-gray-50/20">
+                        <section>
+                            <h3 class="text-blue-800 font-bold text-lg flex items-center gap-2 mb-4 border-b pb-2">
+                                <i class="fa-solid fa-users"></i> Perfis de Personagem
+                            </h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800 mb-1">Protagonista Masculino:</p>
+                                    <p class="text-sm text-gray-700 leading-relaxed text-justify">O "Justiceiro Silencioso". Um marido provedor e trabalhador que, apesar de desconfiado, mantém a calma para coletar provas concretas. Ele representa a figura da vítima que se torna o estrategista da própria vingança.</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-red-600 mb-1">Protagonista Feminina (Antagonista):</p>
+                                    <p class="text-sm text-gray-700 leading-relaxed text-justify">A "Falsa Esposa" / Interesseira. Extremamente manipuladora e fria, usa o afeto como moeda de troca. Ela não tem remorso em trair não apenas o marido, mas em planejar um golpe financeiro (transferir bens para o nome dela).</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-orange-600 mb-1">O Amante (O Talarico):</p>
+                                    <p class="text-sm text-gray-700 leading-relaxed text-justify">O "Melhor Amigo" traidor. Representa a quebra máxima de confiança. Apesar de demonstrar uma falsa "culpa" por ouvir os desabafos do amigo, ele é cúmplice no plano financeiro e depende do dinheiro do marido traído.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section>
+                            <h3 class="text-green-800 font-bold text-lg flex items-center gap-2 mb-4 border-b pb-2">
+                                <i class="fa-solid fa-clock"></i> Ritmo (Timeline)
+                            </h3>
+                            <div class="space-y-6 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-200">
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">1</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">0-20s (O Gancho)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">Uma despedida carinhosa que esconde a primeira pista: o marido coloca um microfone escondido na esposa. Isso gera curiosidade imediata no público: "O que ele vai descobrir?".</p>
+                                    </div>
+                                </div>
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">2</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">20-55s (A Emboscada Financeira)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">A esposa finge precisar de dinheiro para fins pessoais (R$ 1.000,00). O marido entrega o dinheiro, aumentando a indignação do público que já sabe que algo está errado.</p>
+                                    </div>
+                                </div>
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">3</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">55-85s (O Código Escancarado)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">A esposa recebe uma ligação do amante na frente do marido e o chama de "Michele". O público sente a tensão da mentira óbvia ("Michele tem barba e 1,70m").</p>
+                                    </div>
+                                </div>
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">4</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">85-115s (A Escuta Reveladora)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">O áudio do microfone revela a conversa real entre os amantes. A revelação de que o amante é o melhor amigo do marido e que o plano é roubar os bens dele eleva o ódio da audiência contra os vilões ao nível máximo.</p>
+                                    </div>
+                                </div>
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">5</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">115-130s (O Clímax Emocional)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">O choque do protagonista ao ouvir a verdade e a promessa de uma "surpresa" (vingança) para quando ela voltar. O vídeo termina no auge da expectativa.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="lg:col-span-2 p-6">
+                        <section>
+                            <h3 class="text-purple-800 font-bold text-lg flex items-center gap-2 mb-6 border-b pb-2">
+                                <i class="fa-solid fa-shuffle"></i> Elementos Substituíveis
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-sm">
+                                <div>
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">Conflito Central (Motivo da traição/conluio):</p>
+                                    <ul class="list-none space-y-2 text-gray-700">
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Dinheiro para pagar parcela da moto (Versão atual)</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> Pagar dívida de jogo do amante</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> Financiar uma viagem de luxo para os dois</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> Sustentar o vício ou estilo de vida ostentação do amante</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">Formas de Evidência (Tecnologia e Vigilância):</p>
+                                    <ul class="list-none space-y-2 text-gray-700">
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Microfone escondido na roupa (Versão atual)</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> Rastreador GPS no carro</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> Câmera oculta em um urso de pelúcia ou presente</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> Espelhamento de tela de celular ou tablet</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">O Vínculo do Amante (Nível de Traição):</p>
+                                    <ul class="list-none space-y-2 text-gray-700">
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Melhor amigo do marido (Versão atual)</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> Irmão ou primo do marido</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> Funcionário de confiança da empresa do marido</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> Vizinho de porta</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">O Plano Final da Vilã:</p>
+                                    <ul class="list-none space-y-2 text-gray-700">
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Passar os bens para o próprio nome (Versão atual)</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> Forjar uma agressão para ganhar a casa no divórcio</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> Esvaziar a conta conjunta e fugir do país</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> Engravidar do amante e dizer que o filho é do marido</li>
+                                    </ul>
+                                </div>
+                                <div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">Cenas de Impacto (Ações):</p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <ul class="list-none space-y-2 text-gray-700">
+                                            <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Marido contando as notas uma a uma (Gera revolta)</li>
+                                            <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> O abraço "falso" de despedida</li>
+                                        </ul>
+                                        <ul class="list-none space-y-2 text-gray-700">
+                                            <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> O marido ouve o áudio sozinho no carro/escritório</li>
+                                            <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> O flagrante final com as malas prontas na porta de casa</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
-        </div>
+        </article>
 
-        <!-- Grid Container (脚本卡片展示) -->
-        <div id="script-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-            <!-- JS Injected -->
-        </div>
-
-        <!-- Empty State -->
-        <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center">
-            <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center text-slate-300 text-4xl mb-6">
-                <i class="fas fa-folder-open"></i>
+        <!-- SCRIPT 2 -->
+        <article class="script-card bg-white rounded-2xl card-shadow overflow-hidden border border-gray-100 transition-all duration-300 shadow-sm">
+            <div onclick="toggleScript(this.parentElement)" class="p-6 cursor-pointer hover:bg-gray-50 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">2</div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Colapso da confiança e jogo de lealdade (V2)</h2>
+                        <p class="text-gray-500 text-sm italic">Abril | Drama de relacionamento | Tema viral</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <i class="fa-solid fa-chevron-down text-gray-400 chevron-icon transition-transform duration-300"></i>
+                </div>
             </div>
-            <h3 class="text-xl font-bold text-slate-800">Nenhum roteiro encontrado</h3>
-        </div>
 
-        <!-- Vídeos de Referência -->
-        <section class="mb-16 pt-10 border-t border-slate-200">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-2xl font-bold flex items-center gap-3 text-purple-900">
-                    <span class="w-2 h-8 bg-amber-500 rounded-full"></span>
-                    Vídeos de Referência
-                </h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Video 1 -->
-                <div class="group">
-                    <a href="https://www.kwai.com/@milacantinho/video/5197022600945057734" target="_blank">
-                        <div class="relative rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-purple-400 transition-all aspect-[9/16] bg-slate-200">
-                            <img src="https://bs3-hb1.corp.kuaishou.com/upload-noah/frame/9vBpvQwqA3_11_150108737376499_4080?AWSAccessKeyId=upload-noah&Expires=1777210918&Signature=sB2qeaAAtc0oV%2FMMGqFbsQIYme0%3D&sizeType=m" onerror="this.src='https://placehold.co/400x711/2e1065/ffffff?text=Drama+de+Relacionamento'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5">
-                                <span class="text-[10px] font-black text-white bg-purple-600 self-start px-3 py-1 rounded-full mb-2 uppercase tracking-wider">Drama de relacionamento</span>
-                                <p class="text-white font-bold text-xs opacity-80">Assista no Kwai <i class="fas fa-external-link-alt ml-1"></i></p>
-                            </div>
-                        </div>
+            <div class="script-content border-t bg-white">
+                <div class="p-6 bg-slate-50 border-b flex justify-end gap-3">
+                    <button onclick="copyLink('https://www.kwai.com/@Bondadee/video/5229392228773889877')" class="text-blue-600 hover:text-blue-700 flex items-center gap-2 font-semibold bg-white px-5 py-2.5 rounded-lg transition border border-blue-200 shadow-sm">
+                        <i class="fa-solid fa-copy"></i> Copiar Link
+                    </button>
+                    <a href="https://www.kwai.com/@Bondadee/video/5229392228773889877" target="_blank" class="text-orange-500 hover:text-orange-600 flex items-center gap-2 font-semibold bg-white px-5 py-2.5 rounded-lg transition border border-orange-200 shadow-sm">
+                        <i class="fa-solid fa-play"></i> Assistir Exemplo
                     </a>
                 </div>
 
-                <!-- Video 2 -->
-                <div class="group">
-                    <a href="https://www.kwai.com/@familiacarvalhoof/video/5242621549000711605" target="_blank">
-                        <div class="relative rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-blue-400 transition-all aspect-[9/16] bg-slate-200">
-                            <img src="https://kwaipro-audit.yximgs.com/upic/2025/06/05/04/BMjAyNTA2MDUwNDExMTdfMTUwMDAxNjc1NzE0MTQwXzE1MDEwODk1NTA1OTA2MV8zXzM=_pcover_B9e9c06a8e0dcba6e7aa414ffa8e675c6.jpg?tag=1-1776950824-sp-0-bibwkcbbs7-102dfc9204137447" onerror="this.src='https://placehold.co/400x711/1e3a8a/ffffff?text=Drama+Familiar'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5">
-                                <span class="text-[10px] font-black text-white bg-blue-600 self-start px-3 py-1 rounded-full mb-2 uppercase tracking-wider">Drama familiar</span>
-                                <p class="text-white font-bold text-xs opacity-80">Assista no Kwai <i class="fas fa-external-link-alt ml-1"></i></p>
+                <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x">
+                    <div class="p-6 space-y-8 bg-gray-50/20">
+                        <section>
+                            <h3 class="text-blue-800 font-bold text-lg flex items-center gap-2 mb-4 border-b pb-2">
+                                <i class="fa-solid fa-users"></i> Perfis de Personagem
+                            </h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800 mb-1">Protagonista Masculino:</p>
+                                    <p class="text-sm text-gray-700 leading-relaxed text-justify">O "Marido Respeitoso, mas Firme". Ele evita a agressividade gratuita, prefere usar a lógica (empatia reversa) e o diálogo. Ele representa o homem que provê segurança e se sente traído pela falta de transparência, não necessariamente por uma traição física confirmada, mas pela quebra de limite social.</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-red-600 mb-1">Protagonista Feminina:</p>
+                                    <p class="text-sm text-gray-700 leading-relaxed text-justify">A "Esposa Conveniente". Ela utiliza o argumento da "economia" e da "amizade" para validar um comportamento que ela mesma admite que não aceitaria se fosse o contrário. Ela desempenha o papel de quem minimiza os sentimentos do parceiro (gaslighting leve) para manter um benefício próprio.</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-orange-600 mb-1">Antagonista (Omissa):</p>
+                                    <p class="text-sm text-gray-700 leading-relaxed text-justify">O "Amigo da Onça" (Davi). Embora não fale muito, ele é a figura que ignora a hierarquia do casamento alheio, aproveitando-se da proximidade física que a garupa de uma moto exige.</p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </section>
 
-                <!-- Video 3 -->
-                <div class="group">
-                    <a href="https://www.kwai.com/@casaloficial124/video/5252191701258536973" target="_blank">
-                        <div class="relative rounded-3xl overflow-hidden shadow-lg border-4 border-white group-hover:border-green-400 transition-all aspect-[9/16] bg-slate-200">
-                            <img src="https://bs3-hb1.corp.kuaishou.com/upload-noah/frame/bWNiByMkAC_11_150109651244175_1530?AWSAccessKeyId=upload-noah&Expires=1777211122&Signature=KuN44uQ0lfbfVaVasISEi9U2aGc%3D&sizeType=m" onerror="this.src='https://placehold.co/400x711/064e3b/ffffff?text=Drama+Social'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5">
-                                <span class="text-[10px] font-black text-white bg-green-600 self-start px-3 py-1 rounded-full mb-2 uppercase tracking-wider">Drama social</span>
-                                <p class="text-white font-bold text-xs opacity-80">Assista no Kwai <i class="fas fa-external-link-alt ml-1"></i></p>
+                        <section>
+                            <h3 class="text-green-800 font-bold text-lg flex items-center gap-2 mb-4 border-b pb-2">
+                                <i class="fa-solid fa-clock"></i> Ritmo (Timeline)
+                            </h3>
+                            <div class="space-y-6 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-200">
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">1</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">0-20s (O Gancho)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">O conflito visual imediato. O marido se oferece para levar a esposa, e ela o rejeita porque "o amigo" já está chegando. O público é fisgado pela audácia da situação.</p>
+                                    </div>
+                                </div>
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">2</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">20-55s (A Racionalização)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">A esposa explica o benefício financeiro (não gasta gasolina). Isso gera debate nos comentários: "Vale a pena economizar às custas do respeito do marido?".</p>
+                                    </div>
+                                </div>
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">3</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">55-85s (O Teste da Empatia)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">O protagonista inverte os papéis ("E se eu levasse uma colega na garupa?"). A confissão dela de que "não gostaria" é o ponto de virada onde o público se coloca 100% ao lado do marido.</p>
+                                    </div>
+                                </div>
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">4</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">85-110s (A Revelação do Sacrifício)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">O marido revela que estava juntando dinheiro para comprar uma moto (Biz) para ela. Isso adiciona uma camada de "ingratidão" à conduta da esposa.</p>
+                                    </div>
+                                </div>
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">5</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">110-140s (O Choque de Visões)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">O embate entre "é só um amigo" vs. "eu sou homem e conheço a intenção de outro homem". Esse é o clímax ideológico do vídeo.</p>
+                                    </div>
+                                </div>
+                                <div class="relative pl-10">
+                                    <span class="absolute left-0 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold border-4 border-white shadow-sm">6</span>
+                                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-900 text-xs">140-160s (O Desfecho de Ação)</h4>
+                                        <p class="text-gray-700 mt-1 text-xs leading-relaxed text-justify">O marido decide confrontar o terceiro elemento. O vídeo termina com a promessa de um confronto direto, preparando o espectador para a "Parte 2".</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </a>
+                        </section>
+                    </div>
+
+                    <div class="lg:col-span-2 p-6">
+                        <section>
+                            <h3 class="text-purple-800 font-bold text-lg flex items-center gap-2 mb-6 border-b pb-2">
+                                <i class="fa-solid fa-shuffle"></i> Elementos Substituíveis
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-sm text-gray-700">
+                                <div>
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">Conflito Central (O privilégio aceito):</p>
+                                    <ul class="list-none space-y-2">
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Carona de moto todos os dias (Versão atual)</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> Almoços particulares diários pagos pelo colega</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> Colega que traz presentes caros sob o pretexto de "amizade"</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> Academia com personal trainer que é ex-namorado</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">Argumento de Defesa (A desculpa):</p>
+                                    <ul class="list-none space-y-2">
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Economia de combustível/gasolina (Versão atual)</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> "Ele é como se fosse um irmão para mim"</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> "É caminho para o trabalho, seria falta de educação recusar"</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> "Você está sempre ocupado e não pode me dar atenção"</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">A Prova de Amor/Sacrifício do Marido:</p>
+                                    <ul class="list-none space-y-2">
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Economizando para comprar uma moto Biz para ela (Versão atual)</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> Trabalhando em dois empregos para pagar um carro para ela</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> Cancelando o próprio lazer para ser o motorista dela</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> Planejando uma viagem de renovação de votos</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">Ações de Impacto (Visual/Atitude):</p>
+                                    <ul class="list-none space-y-2">
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Marido indo em direção à moto para encarar o rapaz (Versão atual)</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> Marido jogando o capacete dela no chão</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> Marido mostrando o extrato da poupança da moto dela</li>
+                                        <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> Marido pegando o celular dela e ligando para o "amigo" no viva-voz</li>
+                                    </ul>
+                                </div>
+                                <div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <p class="font-bold text-gray-800 mb-3 uppercase tracking-wider text-xs">Cenários Sugeridos:</p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <ul class="list-none space-y-2">
+                                            <li class="flex items-start gap-2"><span class="font-bold text-blue-600">A.</span> Frente de casa/Garagem (Versão atual)</li>
+                                            <li class="flex items-start gap-2"><span class="font-bold text-blue-600">B.</span> Portaria do prédio</li>
+                                        </ul>
+                                        <ul class="list-none space-y-2">
+                                            <li class="flex items-start gap-2"><span class="font-bold text-blue-600">C.</span> Ponto de ônibus/saída do trabalho</li>
+                                            <li class="flex items-start gap-2"><span class="font-bold text-blue-600">D.</span> Estacionamento de um supermercado</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
-        </section>
+        </article>
+
     </main>
 
-    <!-- Modal Detalhado -->
-    <div id="script-modal" class="fixed inset-0 z-[100] hidden overflow-hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md" onclick="closeModal()"></div>
-        <div class="relative bg-white w-full max-w-6xl h-[92vh] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col">
-            <div class="theme-gradient p-8 md:p-10 text-white relative flex-shrink-0">
-                <button onclick="closeModal()" class="absolute top-6 right-6 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all">
-                    <i class="fas fa-times"></i>
-                </button>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3">
-                        <span id="modal-id" class="text-[10px] font-bold text-amber-400 tracking-widest bg-white/10 px-3 py-1 rounded"></span>
-                        <span id="modal-cat" class="text-sm font-black text-white uppercase tracking-widest bg-purple-950/30 px-3 py-1 rounded-lg border border-white/10"></span>
-                    </div>
-                    <span id="modal-level" class="text-xs font-black bg-amber-500 text-purple-950 px-4 py-1.5 rounded-full shadow-lg"></span>
-                </div>
-                <h2 id="modal-title" class="text-2xl md:text-4xl font-black mb-2 leading-tight"></h2>
-            </div>
-            <div class="flex-grow overflow-y-auto p-8 md:p-10 custom-scroll">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-                    <div class="lg:col-span-7 space-y-10">
-                        <section>
-                            <h4 class="text-purple-900 font-black text-xs uppercase mb-4 tracking-widest flex items-center gap-2">
-                                <i class="fas fa-align-left text-amber-500"></i> Resumo do Conteúdo
-                            </h4>
-                            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-slate-700 italic">
-                                <p id="modal-resumo"></p>
-                            </div>
-                        </section>
-                        <section>
-                            <h4 class="text-purple-900 font-black text-xs uppercase mb-4 tracking-widest flex items-center gap-2">
-                                <i class="fas fa-clock text-amber-500"></i> Estrutura de Ritmo
-                            </h4>
-                            <div id="modal-ritmo" class="space-y-3"></div>
-                        </section>
-                    </div>
-                    <div class="lg:col-span-5 space-y-10">
-                        <section class="bg-purple-50 p-6 rounded-3xl border border-purple-100">
-                            <h4 class="text-purple-900 font-black text-xs uppercase mb-4 tracking-widest">
-                                <i class="fas fa-users"></i> Perfis de Personagem
-                            </h4>
-                            <div id="modal-perfis" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed"></div>
-                        </section>
-                        <section id="modal-elementos-container" class="bg-amber-50/50 p-6 rounded-3xl border border-amber-100">
-                            <h4 class="text-amber-900 font-black text-xs uppercase mb-4 tracking-widest">
-                                <i class="fas fa-exchange-alt"></i> Elementos Substituíveis
-                            </h4>
-                            <div id="modal-elementos" class="space-y-6"></div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        const scriptData = [
-            {
-                id: "Roteiro 1",
-                cat: "Drama de relacionamento",
-                title: "Afeto falso e manipulação emocional",
-                level: "Médio",
-                resumo: "Um namorado racional que foi oprimido por padrões duplos durante muito tempo e finalmente reage contra uma parceira emotiva com forte desejo de controle.",
-                perfis: "Protagonista masculino: Um namorado racional que foi oprimido por padrões duplos durante muito tempo e finalmente reage\n\nProtagonista feminina: Uma parceira emotiva com um forte desejo de controle, mas que racionaliza suas próprias ações",
-                ritmo: [
-                    ["0-15s", "O comportamento extremo no início atrai fortemente o público"],
-                    ["15-45s", "Progressão; a namorada finge inocência, deixando o público intrigado"],
-                    ["45-75s", "O protagonista masculino leva o espectador a olhar para o seu celular, uma reviravolta na trama que aumenta a tensão"],
-                    ["75-100s", "Atingindo o ápice emocional"],
-                    ["100-110s", "A discussão sobre o duplo padrão se intensifica, revelando um choque de valores"],
-                    ["110-120s", "O protagonista masculino expulsa a protagonista feminina; a protagonista feminina questiona o público"]
-                ],
-                elementos: [
-                    { t: "Conflito Central", i: ["A. Conversar com um ex", "B. Flertar com um colega de trabalho", "C. Conversa até tarde da noite", "D. Apagar o histórico de conversas"] },
-                    { t: "Formas de Evidência", i: ["A. Capturas de tela", "B. Gravações de voz", "C. Câmeras de segurança", "D. Denúncia de amigo"] },
-                    { t: "Dupla Medida", i: ["A. Proibir contato com sexo oposto", "B. Verificar celular", "C. Controlar vida social", "D. Chantagem emocional"] },
-                    { t: "Métodos de Punição", i: ["A. Expulsá-la de casa", "B. Terminar o relacionamento", "C. Devolver presentes", "D. Expor a verdade para os pais"] }
-                ]
-            },
-            {
-                id: "Roteiro 2",
-                cat: "Drama social",
-                title: "Sinal de socorro silencioso",
-                level: "Difícil",
-                resumo: "Um policial percebe um pedido de socorro silencioso e salva a vítima de um sequestrador agressivo.",
-                perfis: "Policial: Observador, experiente, mantém a calma sob pressão.\n\nVítima: Aterrorizada, tenta desesperadamente comunicar o perigo sem alertar o agressor.\n\nSequestrador: Impulsivo, violento e usa um 'gancho' (como um bebê) para garantir a obediência.",
-                ritmo: [
-                    ["0-30s", "O policial aborda um carro suspeito. Tensão alta."],
-                    ["30-50s", "O agressor finge normalidade enquanto a vítima faz o sinal silencioso."],
-                    ["50-80s", "O policial entende o sinal e começa um jogo psicológico para ganhar tempo."],
-                    ["80-100s", "A vítima revela a ameaça real (ex: bebê em perigo)."],
-                    ["100-120s", "O policial usa tática de inteligência (rastreador) em vez de força bruta."]
-                ],
-                elementos: [
-                    { t: "Pista Inicial", i: ["A. Cabelo saindo pelo porta-malas", "B. Sinal de socorro com a mão", "C. Placa clonada", "D. Vítima piscando em código"] },
-                    { t: "Ameaça do Vilão", i: ["A. Matar o bebê", "B. Comparsa na casa da família", "C. Dispositivo perigoso no carro", "D. Fugir para outro estado"] },
-                    { t: "Tática de Resgate", i: ["A. Uso de rastreador discreto", "B. Forjar defeito no carro", "C. Chamar negociador", "D. Fingir aceitar suborno"] }
-                ]
-            },
-            {
-                id: "Roteiro 3",
-                cat: "Drama de suspense",
-                title: "O perigo está dentro de casa (Padrasto)",
-                level: "Médio",
-                resumo: "Uma filha tenta alertar a mãe sobre o comportamento predatório do padrasto, mas enfrenta a descrença inicial até que a verdade é revelada.",
-                perfis: "Mãe: Dividida entre o novo amor e a proteção da filha.\n\nFilha: Vulnerável, mas corajosa ao buscar provas.\n\nPadrasto: Manipulador, esconde sua verdadeira face atrás de uma imagem de 'bom provedor'.",
-                ritmo: [
-                    ["0-25s", "A filha é flagrada pelo padrasto em uma situation de desconforto."],
-                    ["25-55s", "A filha tenta contar à mãe, mas é silenciada ou desacreditada."],
-                    ["55-85s", "Uma pista física é encontrada (ex: câmera oculta ou diário)."],
-                    ["85-110s", "Confronto final onde a mãe testemunha a verdadeira face dele."],
-                    ["110-120s", "A expulsão definitiva e o alívio emocional."]
-                ],
-                elementos: [
-                    { t: "Pista Oculta", i: ["A. Câmera no urso de pelúcia", "B. Mensagens no tablet", "C. Histórico do navegador", "D. Gravação de áudio"] },
-                    { t: "Reação da Mãe", i: ["A. Expulsão imediata", "B. Chamar a polícia", "C. Plano de vingança", "D. Fuga estratégica"] }
-                ]
-            },
-            {
-                id: "Roteiro 4",
-                cat: "Drama familiar",
-                title: "A Madrasta e a Ganância",
-                level: "Simples",
-                resumo: "Conflito sobre a herança de um pai falecido, onde a madrasta tenta deserdar o filho legítimo.",
-                perfis: "Madrasta: Fria, movida por interesses financeiros.\n\nFilho/Enteado: Honrado, mas injustiçado.\n\nAdvogado/Testemunha: O elemento surpresa que detém a verdade.",
-                ritmo: [
-                    ["0-30s", "A madrasta humilha o enteado logo após o funeral."],
-                    ["30-60s", "Ela revela que 'não sobrou nada' para ele no testamento falso."],
-                    ["60-90s", "O filho descobre um testamento real ou um vídeo de despedida."],
-                    ["90-110s", "A revelação pública da fraude durante a leitura oficial."],
-                    ["110-120s", "A justiça sendo feita e a madrasta saindo sem nada."]
-                ],
-                elementos: [
-                    { t: "Prova da Fraude", i: ["A. Assinatura falsificada", "B. Vídeo de segurança", "C. Testemunha ocular (mordomo)", "D. Cofre secreto"] },
-                    { t: "Desfecho da Vilã", i: ["A. Prisão", "B. Falência", "C. Expulsão da mansão", "D. Desonra pública"] }
-                ]
-            },
-            {
-                id: "Roteiro 5",
-                cat: "Drama familiar",
-                title: "Despertar sob Opressão Materna",
-                level: "Médio",
-                resumo: "Uma mãe controladora que vê as filhas como bens materiais até que a irmandade desperta para a liberdade.",
-                perfis: "Mãe: Governante patológica, vaidosa e manipuladora.\n\nFilhas: Diferentes entre si (ex: obediente vs rebelde), mas unidas pelo destino compartilhado.",
-                ritmo: [
-                    ["0-20s", "Gancho forte: Uma punição injusta ou humilhação pública."],
-                    ["20-50s", "Apresentação da hierarquia familiar rígida."],
-                    ["50-80s", "O ponto de virada: Uma das filhas descobre uma mentira grave da mãe."],
-                    ["80-100s", "Mudança de medo para determinação. O despertar."],
-                    ["100-120s", "A união das irmãs contra a opressão. Suspense final."]
-                ],
-                elementos: [
-                    { t: "Desculpas da Mãe", i: ["A. Casamento arranjado", "B. Pagar dívidas do irmão", "C. Notas exemplares", "D. Herdar o negócio"] },
-                    { t: "Contraste da Filha", i: ["A. Andrógina vs Feminina", "B. Nerd vs Rebelde", "C. Gorda vs Magra", "D. Obediente vs Questionadora"] },
-                    { t: "Retaliação", i: ["A. Fugir de casa", "B. Rasgar carta de aceitação falsa", "C. Chamar polícia", "D. Abrir próprio negócio"] }
-                ]
-            }
-        ];
-
-        let favorites = JSON.parse(localStorage.getItem('premium_scripts_favs')) || [];
-        let showFavoritesOnly = false;
-
-        function toggleFavorite(id, event) {
-            event.stopPropagation();
-            const index = favorites.indexOf(id);
-            if (index === -1) favorites.push(id);
-            else favorites.splice(index, 1);
-            localStorage.setItem('premium_scripts_favs', JSON.stringify(favorites));
-            updateFavStats();
-            render(filterLogic());
+        function toggleScript(card) {
+            card.classList.toggle('active');
         }
 
-        function updateFavStats() {
-            document.getElementById('fav-count').innerText = favorites.length;
-        }
-
-        function toggleShowFavorites() {
-            showFavoritesOnly = !showFavoritesOnly;
-            const btn = document.getElementById('fav-toggle-btn');
-            const icon = document.getElementById('header-star-icon');
-            const filterTitle = document.getElementById('filter-title');
-
-            if (showFavoritesOnly) {
-                btn.classList.add('bg-amber-400', 'text-purple-900');
-                icon.classList.replace('far', 'fas');
-                filterTitle.classList.remove('hidden');
-            } else {
-                btn.classList.remove('bg-amber-400', 'text-purple-900');
-                icon.classList.replace('fas', 'far');
-                filterTitle.classList.add('hidden');
-            }
-            render(filterLogic());
-        }
-
-        function filterLogic() {
-            const term = document.getElementById('search-input').value.toLowerCase();
-            const cat = document.getElementById('cat-filter').value;
-            const level = document.getElementById('level-filter').value;
+        function copyLink(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
             
-            return scriptData.filter(s => {
-                const matchSearch = s.title.toLowerCase().includes(term) || s.resumo.toLowerCase().includes(term);
-                const matchCat = cat === 'all' || s.cat === cat;
-                const matchLevel = level === 'all' || s.level === level;
-                const matchFav = showFavoritesOnly ? favorites.includes(s.id) : true;
-                return matchSearch && matchCat && matchLevel && matchFav;
-            });
+            const toast = document.getElementById("toast");
+            toast.className = "copy-toast show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
         }
-
-        function filterContent() { render(filterLogic()); }
-
-        function resetFilters() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('cat-filter').value = 'all';
-            document.getElementById('level-filter').value = 'all';
-            showFavoritesOnly = false;
-            document.getElementById('fav-toggle-btn').classList.remove('bg-amber-400', 'text-purple-900');
-            document.getElementById('header-star-icon').classList.replace('fas', 'far');
-            document.getElementById('filter-title').classList.add('hidden');
-            render(scriptData);
-        }
-
-        function render(data) {
-            const grid = document.getElementById('script-grid');
-            const empty = document.getElementById('empty-state');
-            grid.innerHTML = '';
-            if (data.length === 0) {
-                empty.classList.remove('hidden');
-                grid.classList.add('hidden');
-            } else {
-                empty.classList.add('hidden');
-                grid.classList.remove('hidden');
-                data.forEach(s => {
-                    const isFav = favorites.includes(s.id);
-                    const card = document.createElement('div');
-                    card.className = `glass-card rounded-[2rem] p-8 cursor-pointer flex flex-col h-full ${isFav ? 'is-favorite' : ''}`;
-                    card.onclick = () => openModal(s);
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start mb-6 gap-3">
-                            <span class="category-badge px-3 py-1.5 rounded-lg text-[10px] font-black uppercase bg-slate-100 text-slate-600 tracking-wider border border-slate-200/50 flex-shrink-0" title="${s.cat}">${s.cat}</span>
-                            <div class="flex items-center gap-3 ml-auto">
-                                <span class="text-[10px] font-black text-amber-600 tracking-wide uppercase flex-shrink-0">${s.level}</span>
-                                <button onclick="toggleFavorite('${s.id}', event)" class="w-8 h-8 rounded-full flex items-center justify-center transition-all bg-white shadow-sm border border-slate-100 hover:scale-110 active:scale-95 flex-shrink-0">
-                                    <i class="${isFav ? 'fas fav-active' : 'far'} fa-star text-xs"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex-grow">
-                            <h3 class="text-xl font-bold text-slate-800 mb-4 leading-tight">${s.title}</h3>
-                            <p class="text-slate-500 text-xs line-clamp-3 italic border-l-4 border-amber-400 pl-4 bg-slate-50/50 py-3 rounded-r-xl">"${s.resumo}"</p>
-                        </div>
-                        <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
-                            <span class="text-[10px] font-bold text-slate-300">${s.id}</span>
-                            <div class="text-purple-900 font-black text-[10px] uppercase tracking-widest flex items-center gap-1 group-hover:text-amber-600 transition-colors">Ver Estrutura <i class="fas fa-arrow-right text-[8px]"></i></div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-        }
-
-        function openModal(s) {
-            document.getElementById('modal-title').innerText = s.title;
-            document.getElementById('modal-cat').innerText = s.cat;
-            document.getElementById('modal-level').innerText = s.level;
-            document.getElementById('modal-resumo').innerText = s.resumo;
-            document.getElementById('modal-id').innerText = s.id;
-            document.getElementById('modal-ritmo').innerHTML = s.ritmo.map(r => `
-                <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <span class="font-black text-purple-900 text-[10px] min-w-[60px] bg-purple-100 px-2 py-1 rounded text-center">${r[0]}</span>
-                    <p class="text-slate-600 text-xs font-medium">${r[1]}</p>
-                </div>`).join('');
-            document.getElementById('modal-perfis').innerText = s.perfis;
-            const elemContainer = document.getElementById('modal-elementos');
-            elemContainer.innerHTML = s.elementos.map(e => `
-                <div>
-                    <p class="text-[10px] font-black text-amber-800 uppercase mb-3 flex items-center gap-2"><span class="w-1 h-1 bg-amber-500 rounded-full"></span> ${e.t}</p>
-                    <div class="grid grid-cols-1 gap-2">${e.i.map(item => `<div class="bg-white px-4 py-2 rounded-xl border border-amber-100 text-[11px] text-slate-600 shadow-sm">${item}</div>`).join('')}</div>
-                </div>`).join('');
-            document.getElementById('script-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            document.getElementById('script-modal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
-        document.getElementById('search-input').oninput = filterContent;
-        document.getElementById('cat-filter').onchange = filterContent;
-        document.getElementById('level-filter').onchange = filterContent;
-        window.onload = () => { render(scriptData); updateFavStats(); };
     </script>
+
 </body>
 </html>
